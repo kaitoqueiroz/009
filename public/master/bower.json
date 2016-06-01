@@ -55,6 +55,9 @@
   },
   "devDependencies": {
     "ng-tags-input": "3.0.0",
-    "angular-bootstrap-colorpicker": "^3.0.25"
+    "angular-bootstrap-colorpicker": "^3.0.25",
+    "angular-xeditable": "^0.1.12",
+    "ng-table": "^0.8.3",
+    "ngSweetAlert": "^1.1.0"
   }
 }

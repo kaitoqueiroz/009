@@ -11,19 +11,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('sessions', ['middleware' => ['auth','cors'], function()
-{
-    return \Response::json(['message'=>'success']);
-}]);
 Route::get('sessions/logout', function(Request $request){
-    return \Response::json($request->session()->flush());
+    return \Response::json([]);
 });
-Route::post('api/login', ['middleware' => ['cors'], 'uses' => 'Auth\AuthController@login']);
-
-Route::get('api/modulos_funcionalidades', ['middleware' => ['cors'], 'uses' => 'ModulosController@modulos_funcionalidades']);
-
-Route::resource('api/modulos', 'ModulosController');
-Route::resource('api/perfis', 'PerfisController');
-Route::resource('api/departamentos', 'DepartamentosController');
-Route::resource('api/filiais', 'FiliaisController');
-Route::resource('api/funcionarios', 'FuncionariosController');

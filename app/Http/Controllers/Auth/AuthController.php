@@ -74,40 +74,5 @@ class AuthController extends Controller
     public function login(Request $request){
         $request->session()->put('user', $request->input('username'));
         return \Response::json(['message'=>'success']);
-
-
-
-        
-        $config = config('adldap_auth');
-        $provider = new \Adldap\Connections\Provider($config["server_config"]);
-
-        $ad = new \Adldap\Adldap();
-        $ad->addProvider('default', $provider);
-
-        $return = null;
-        // Try connecting to the provider.
-        try {
-            // Connect using the providers name.
-            $ad->connect('default');
-
-            try {
-                if ($provider->auth()->attempt($request->input('username'),$request->input('password'),true)) {
-                    $request->session()->put('user', $request->input('username'));
-                    $return = \Response::json(['message'=>'success']);
-                } else {
-                    $return = \Response::json([ 'error' => 401, 'message' => 'Usuário e/ou senha incorreto(s)' ],401);
-                }
-            } catch (\Adldap\Exceptions\Auth\UsernameRequiredException $e) {
-                $return = \Response::json([ 'error' => 401, 'message' => 'Campo Usuário é obrigatório.' ],401);
-            } catch (\Adldap\Exceptions\Auth\PasswordRequiredException $e) {
-                $return = \Response::json([ 'error' => 401, 'message' => 'Campo Senha é obrigatório.' ],401);
-            }
-        } catch (\Adldap\Exceptions\Auth\BindException $e) {
-            $return = \Response::json([ 'error' => 500, 'message' => 'Não foi possível se conectar ao LDAP.' ],500);
-
-        } catch (\Adldap\Exceptions\ConnectionException $e) {
-            $return = \Response::json([ 'error' => 500, 'message' => 'Não foi possível se conectar ao LDAP.' ],500);
-        }
-        return $return;
     }
 }
