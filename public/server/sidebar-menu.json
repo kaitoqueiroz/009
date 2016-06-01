@@ -1,0 +1,41 @@
+[
+  {
+    "text": "Menu",
+    "heading": "true"
+  },
+  {
+    "text": "Compras e vendas",
+    "sref": "#",
+    "icon": "fa fa-line-chart",
+    "submenu": [
+      { "text": "Dashboard", 
+        "sref": "app.dashboard"
+      },
+      { "text": "Metas", 
+        "sref": "app.metas"
+      }
+    ]
+  },
+  {
+    "text": "Funcionários e Perfis",
+    "sref": "#",
+    "icon": "icon-people",
+    "submenu": [
+      { "text": "Funcionários", 
+        "sref": "app.funcionarios"
+      },
+      { "text": "Perfis", 
+        "sref": "app.perfis"
+      },
+      { "text": "Departamentos", 
+        "sref": "app.departamentos"
+      },
+      { "text": "Módulos", 
+        "sref": "app.modulos"
+      },
+      { "text": "Filiais", 
+        "sref": "app.filiais"
+      }
+    ]
+  }
+]

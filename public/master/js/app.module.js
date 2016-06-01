@@ -1,0 +1,38 @@
+/*!
+ * 
+ * Angle - Bootstrap Admin App + AngularJS
+ * 
+ * Version: 3.3.1
+ * Author: @themicon_co
+ * Website: http://themicon.co
+ * License: https://wrapbootstrap.com/help/licenses
+ * 
+ */
+
+// APP START
+// ----------------------------------- 
+
+(function() {
+    'use strict';
+
+    angular
+        .module('angle', [
+            'app.core',
+            'app.routes',
+            'app.sidebar',
+            'app.navsearch',
+            'app.preloader',
+            'app.loadingbar',
+            'app.translate',
+            'app.settings',
+            'app.utils',
+            'app.pages',
+            'app.modulos',
+            'app.perfis',
+            'app.departamentos',
+            'app.filiais',
+            'app.funcionarios',
+            'app.dashboard'
+        ]);
+})();
+

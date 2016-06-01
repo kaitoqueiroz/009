@@ -1,0 +1,106 @@
+<h3>Cadastro de Módulos 
+<a ng-href="#/app/modulos/list" type="button" class="btn btn-labeled btn-default pull-right">
+	<span class="btn-label">
+		<i class="fa fa-arrow-left"></i>
+	</span>
+	Voltar
+</a>
+</h3>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form name="form1" class="form-inline">
+                <div class="col-sm-12">
+                    <div class="input-group col-sm-8">
+                        <span class="input-group-addon" style="width: 80px">{{id}}</span>
+                        <input id="descricao" type="text" ng-model="descricao" placeholder="Descrição do Módulo" class="form-control">
+                    </div>
+                    <div class="checkbox c-checkbox">
+                        <label>
+                            &nbsp;&nbsp;
+                            Ativo?
+                            &nbsp;&nbsp;
+
+                            <checkbox 
+                                ng-model="ativo"
+                                ng-class="{'btn-primary': checked === true, 'btn-default': checked === false}"
+                            ></checkbox>
+                        </label>
+                    </div>
+                </div>
+            </form>
+        	<div class="col-sm-12">
+                <div ng-controller="EditableRowCtrl">
+	                <h3>Funcionalidades</h3>
+	                <div class="form-group col-sm-4 no-padding-left">
+	                    <input type="text" ng-model="nome" placeholder="Nome da funcionalidade" class="form-control">
+	                </div>
+	                <div class="form-group col-sm-4 no-padding-left">
+	                    <input type="text" ng-model="rota" placeholder="Rota da funcionalidade" class="form-control col-sm-6">
+	                </div>
+	                <div class="form-group col-sm-4 no-padding-left">
+	                    <button type="button" class="btn btn-labeled btn-success" ng-click="addUser()">
+	                        <span class="btn-label">
+	                            <i class="fa fa-plus"></i>
+	                        </span> Adicionar
+	                    </button>
+	                </div>
+
+                  	<table class="table table-bordered table-hover table-condensed">
+	                    <tr style="font-weight: bold">
+	                      <td style="width:35%">Nome da Funcionalidade</td>
+	                      <td style="width:20%">Rota da Funcionalidade</td>
+	                      <td style="width:25%">Ações</td>
+	                    </tr>
+	                    <tr ng-repeat="funcionalidade in funcionalidades">
+							<td>
+								<!-- editable funcionalidadename (text with validation) -->
+								<span editable-text="funcionalidade.nome" e-form="rowform" onbeforesave="" e-required>
+								{{ funcionalidade.nome || 'empty' }}
+								</span>
+							</td>
+							<td>
+		                      	<span editable-text="funcionalidade.rota" e-form="rowform" onbeforesave="" e-required>
+		                          {{ funcionalidade.rota || 'empty' }}
+	                        	</span>
+                        	</td>
+							<td style="white-space: nowrap">
+								<!-- form -->
+								<form editable-form name="rowform" onbeforesave="saveUser($data, funcionalidade.id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == funcionalidade">
+									<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+										<i class="fa fa-save"></i>
+									</button>
+									<button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+										<i class="fa fa-close"></i>
+									</button>
+								</form>
+								<div class="buttons" ng-show="!rowform.$visible">
+									<button class="btn btn-primary" ng-click="rowform.$show()">
+										<i class="fa fa-pencil"></i>
+									</button>
+									<button class="btn btn-danger" ng-click="removeUser($index)">
+									<i class="fa fa-trash"></i>
+									</button>
+								</div>
+							</td>
+	                    </tr>
+              		</table>
+              		<legend></legend>
+	                <div class="form-group no-padding-left col-sm-3">
+	                    <button type="button" ng-click="submit()" class="btn btn-labeled btn-primary">
+	                        <span class="btn-label">
+	                            <i class="fa fa-save"></i>
+	                        </span> Salvar
+	                    </button>
+	                    &nbsp;&nbsp;
+	                    <button type="button" class="btn btn-labeled btn-danger" ng-click="cancelar()">
+	                        <span class="btn-label">
+	                            <i class="fa fa-times"></i>
+	                        </span> Cancelar
+	                    </button>
+	                </div>
+                </div>
+        	</div>
+        </div>
+    </div>
+</div>

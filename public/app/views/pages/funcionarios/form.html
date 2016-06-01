@@ -1,0 +1,224 @@
+<h3>Cadastro de Funcionários 
+<a ng-href="#/app/funcionarios/list" type="button" class="btn btn-labeled btn-default pull-right">
+	<span class="btn-label">
+		<i class="fa fa-arrow-left"></i>
+	</span>
+	Voltar
+</a>
+</h3>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form name="form1" class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">Login</label>
+                    <div class="col-lg-8">
+                        <input type="text" id="login" ng-model="entity.login" placeholder="Login do Usuário" class="form-control">
+                    </div>
+
+                    <div class="checkbox c-checkbox col-lg-2">
+                        <label>
+                            &nbsp;&nbsp;
+                            Ativo?
+                            &nbsp;&nbsp;
+
+                            <checkbox 
+                                ng-model="entity.ativo"
+                                ng-class="{'btn-primary': checked === true, 'btn-default': checked === false}"
+                            ></checkbox>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">Nome</label>
+                    <div class="col-lg-10">
+                        <input type="text" id="nome" ng-model="entity.nome" placeholder="Nome do Funcionário" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">Código do Vendedor</label>
+                    <div class="col-lg-10">
+                        <input type="text" id="cod_vendedor" ng-model="entity.cod_vendedor" placeholder="Código do Vendedor" class="form-control">
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="col-sm-12">
+                <div ng-controller="PerfilTableCtrl">
+                    <h3>Perfil</h3>
+                    <div class="form-group col-sm-8 no-padding-left">
+                        <input 
+                            type="text"
+                            ng-model="perfil_search" 
+                            typeahead-min-length="0" 
+                            uib-typeahead="perfil as perfil.descricao for perfil in perfis | filter:{descricao:$viewValue} | limitTo:8"
+                            class="form-control" 
+                            placeholder="Pesquisar">
+                    </div>
+                    <div class="form-group col-sm-4 no-padding-left">
+                        <button type="button" class="btn btn-labeled btn-success" ng-click="add()">
+                            <span class="btn-label">
+                                <i class="fa fa-plus"></i>
+                            </span> Adicionar
+                        </button>
+                    </div>
+
+                    <table class="table table-bordered table-hover table-condensed col-sm-8">
+                        <tr style="font-weight: bold">
+                          <td>ID</td>
+                          <td>Perfil</td>
+                          <td>Nível de Privilégio</td>
+                          <td>Ações</td>
+                        </tr>
+                        <tr ng-repeat="perfil in entity.perfis track by perfil.id">
+                            <td>
+                                <!-- editable perfilname (text with validation) -->
+                                <span editable-text="perfil.id" e-form="rowform" onbeforesave="" e-required>
+                                {{ perfil.id || 'empty' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span editable-text="perfil.descricao" e-form="rowform" onbeforesave="" e-required>
+                                  {{ perfil.descricao || 'empty' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span editable-text="perfil.nivel_privilegio" e-form="rowform" onbeforesave="" e-required>
+                                  {{ perfil.nivel_privilegio || 'empty' }}
+                                </span>
+                            </td>
+                            <td style="white-space: nowrap">
+                                <div class="buttons" ng-show="!rowform.$visible">
+                                    <button class="btn btn-danger" ng-click="remove($index)">
+                                    <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="col-sm-12">
+                <div ng-controller="DepartamentoTableCtrl">
+                    <h3>Departamento</h3>
+                    <div class="form-group col-sm-8 no-padding-left">
+                        <input 
+                            type="text"
+                            ng-model="departamento_search" 
+                            typeahead-min-length="0" 
+                            uib-typeahead="departamento as departamento.descricao for departamento in departamentos | filter:{descricao:$viewValue} | limitTo:8"
+                            class="form-control" 
+                            placeholder="Pesquisar">
+                    </div>
+                    <div class="form-group col-sm-4 no-padding-left">
+                        <button type="button" class="btn btn-labeled btn-success" ng-click="add()">
+                            <span class="btn-label">
+                                <i class="fa fa-plus"></i>
+                            </span> Adicionar
+                        </button>
+                    </div>
+
+                    <table class="table table-bordered table-hover table-condensed col-sm-8">
+                        <tr style="font-weight: bold">
+                          <td>ID</td>
+                          <td>Departamento</td>
+                          <td>Ações</td>
+                        </tr>
+                        <tr ng-repeat="departamento in entity.departamentos track by departamento.id">
+                            <td>
+                                <!-- editable departamentoname (text with validation) -->
+                                <span editable-text="departamento.id" e-form="rowform" onbeforesave="" e-required>
+                                {{ departamento.id || 'empty' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span editable-text="departamento.descricao" e-form="rowform" onbeforesave="" e-required>
+                                  {{ departamento.descricao || 'empty' }}
+                                </span>
+                            </td>
+                            <td style="white-space: nowrap">
+                                <div class="buttons" ng-show="!rowform.$visible">
+                                    <button class="btn btn-danger" ng-click="remove($index)">
+                                    <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="col-sm-12">
+                <div ng-controller="FilialTableCtrl">
+                    <h3>Filial</h3>
+                    <div class="form-group col-sm-8 no-padding-left">
+                        <input 
+                            type="text"
+                            ng-model="filial_search" 
+                            typeahead-min-length="0" 
+                            uib-typeahead="filial as filial.descricao for filial in filiais | filter:{descricao:$viewValue} | limitTo:8"
+                            class="form-control" 
+                            placeholder="Pesquisar">
+                    </div>
+                    <div class="form-group col-sm-4 no-padding-left">
+                        <button type="button" class="btn btn-labeled btn-success" ng-click="add()">
+                            <span class="btn-label">
+                                <i class="fa fa-plus"></i>
+                            </span> Adicionar
+                        </button>
+                    </div>
+
+                    <table class="table table-bordered table-hover table-condensed col-sm-8">
+                        <tr style="font-weight: bold">
+                          <td>ID</td>
+                          <td>Filial</td>
+                          <td>Ações</td>
+                        </tr>
+                        <tr ng-repeat="filial in entity.filiais track by filial.id">
+                            <td>
+                                <!-- editable filialname (text with validation) -->
+                                <span editable-text="filial.id" e-form="rowform" onbeforesave="" e-required>
+                                {{ filial.id || 'empty' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span editable-text="filial.descricao" e-form="rowform" onbeforesave="" e-required>
+                                  {{ filial.descricao || 'empty' }}
+                                </span>
+                            </td>
+                            <td style="white-space: nowrap">
+                                <div class="buttons" ng-show="!rowform.$visible">
+                                    <button class="btn btn-danger" ng-click="remove($index)">
+                                    <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="col-sm-4"></div>
+                </div>
+            </div>
+
+
+            <div>&nbsp;</div>
+            <legend></legend>
+            <div class="form-group col-sm-3">
+                <button type="button" ng-click="submit()" class="btn btn-labeled btn-primary">
+                    <span class="btn-label">
+                        <i class="fa fa-save"></i>
+                    </span> Salvar
+                </button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-labeled btn-danger" ng-click="cancelar()">
+                    <span class="btn-label">
+                        <i class="fa fa-times"></i>
+                    </span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

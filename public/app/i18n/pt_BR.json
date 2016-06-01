@@ -1,0 +1,23 @@
+{
+  "dashboard": {
+    "WELCOME": "Bem vindo"
+  },
+  "topbar": {
+    "search": {
+      "PLACEHOLDER": "Type and hit enter.."
+    }
+  },
+  "sidebar": {
+    "WELCOME": "Bem vindo",
+    "heading": {
+      "HEADER": "Main Navigation"
+    },
+    "nav": {
+      "SINGLEVIEW": "Single View",
+      "menu": {
+        "MENU": "Funcionários e Perfis",
+        "SUBMENU": "Módulos"
+      }
+    }
+  }
+}

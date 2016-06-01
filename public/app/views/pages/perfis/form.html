@@ -1,0 +1,95 @@
+<style type="text/css">
+    .level-2{
+        margin-left: 30px;
+        height: 30px;
+    }
+</style>
+<h3>Cadastro de Perfil 
+<a ng-href="#/app/perfis/list" type="button" class="btn btn-labeled btn-default pull-right">
+	<span class="btn-label">
+		<i class="fa fa-arrow-left"></i>
+	</span>
+	Voltar
+</a>
+</h3>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form name="form1" class="form-inline">
+                <div class="col-sm-12">
+                    <div class="input-group col-sm-8">
+                        <span class="input-group-addon" style="width: 80px">{{id}}</span>
+                        <input id="descricao" type="text" ng-model="descricao" placeholder="Descrição do Perfil" class="form-control">
+                    </div>
+                    <div class="checkbox c-checkbox">
+                        <label>
+                            &nbsp;&nbsp;
+                            Ativo?
+                            &nbsp;&nbsp;
+
+                            <checkbox 
+                                ng-model="ativo"
+                                ng-class="{'btn-primary': checked === true, 'btn-default': checked === false}"
+                            ></checkbox>
+                        </label>
+                    </div>
+                    <div>&nbsp;</div>
+                    <div class="form-group col-sm-5 no-padding">
+                        <label style="margin-top: 6px;" class="col-sm-4 control-label no-padding">Nível de Privilégio</label>
+                        <select id="nivel_privilegio" ng-model="nivel_privilegio" class="form-control">
+                            <option value="vendedor">Vendedor</option>
+                            <option value="comprador">Comprador</option>
+                            <option value="departamento">Departamento</option>
+                            <option value="filial">Filial</option>
+                            <option value="geral">Geral</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <h3>Acessos</h3>
+                    <legend></legend>
+
+                    <div class="level-1" ng-repeat="modulo in modulos_funcionalidades">
+                        <label class="control-label">
+                            <checkbox 
+                                ng-change="checkModulo(modulo)"
+                                ng-model="modulo.checked"
+                                ng-class="{'btn-primary': checked === true, 'btn-default': checked === false}"
+                            ></checkbox>
+                            {{modulo.descricao}}
+                        </label>
+
+                        <div class="level-2" ng-repeat="funcionalidade in modulo.funcionalidades">
+                            <checkbox 
+                                ng-change="checkFuncionalidade(modulo)"
+                                ng-model="funcionalidade.checked"
+                                ng-class="{'btn-primary': checked === true, 'btn-default': checked === false}"
+                            ></checkbox>
+
+                            {{funcionalidade.nome}}
+
+                            
+                        </div>
+                    </div>
+
+                    <div>&nbsp;</div>
+
+                    <legend></legend>
+                    <div class="form-group no-padding-left col-sm-3">
+                        <button type="button" ng-click="submit()" class="btn btn-labeled btn-primary">
+                            <span class="btn-label">
+                                <i class="fa fa-save"></i>
+                            </span> Salvar
+                        </button>
+                        &nbsp;&nbsp;
+                        <button type="button" class="btn btn-labeled btn-danger" ng-click="cancelar()">
+                            <span class="btn-label">
+                                <i class="fa fa-times"></i>
+                            </span> Cancelar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

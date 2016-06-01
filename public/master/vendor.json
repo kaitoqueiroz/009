@@ -1,0 +1,20 @@
+[
+  "bower_components/modernizr/modernizr.custom.js",
+  "bower_components/fontawesome/css/font-awesome.min.css",
+  "bower_components/fontawesome/fonts/*",
+  "bower_components/simple-line-icons/css/simple-line-icons.css",
+  "bower_components/angular-xeditable/dist/js/xeditable.min.js",
+  "bower_components/angular-xeditable/dist/css/xeditable.min.css",
+  "bower_components/ng-table/dist/ng-table.min.js",
+  "bower_components/ng-table/dist/ng-table.min.css",
+  "bower_components/ngSweetAlert/SweetAlert.min.js",
+  "bower_components/sweetalert/dist/sweetalert.min.js",
+  "bower_components/sweetalert/dist/sweetalert.css",
+  "bower_components/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js",
+  "bower_components/angular-bootstrap-colorpicker/css/colorpicker.min.css",
+  "bower_components/ng-tags-input/ng-tags-input.min.js",
+  "bower_components/ng-tags-input/ng-tags-input.min.css",
+  "bower_components/ng-tags-input/ng-tags-input.bootstrap.min.css",
+  "bower_components/simple-line-icons/fonts/*",
+  "bower_components/bootstrap/fonts/*"
+]
