@@ -27,14 +27,22 @@
                 <div class="panel panel-default">
                     <table ng-table="ctrl.tableParams" class="table">
                         <thead>
-                            <th style="text-align:left">Id</th>
-                            <th style="text-align:left">Distribuidor</th>
+                            <th style="text-align:left">Nome</th>
+                            <th style="text-align:left">CPF/CNPJ</th>
+                            <th style="text-align:left">Cidade</th>
+                            <th style="text-align:left">Contato</th>
                             <th></th>
                         </thead>
                         <tbody>
                             <tr ng-repeat="distribuidor in $data">
-                                <td>{{distribuidor.id}}</td>
-                                <td>{{distribuidor.descricao}}</td>
+                                <td>{{distribuidor.nome}}</td>
+                                <td>{{distribuidor.cpf_cnpj}}</td>
+                                <td>{{distribuidor.cidade}}</td>
+                                <td>
+                                    {{distribuidor.fone}}<br>
+                                    {{distribuidor.celular}}<br>
+                                    {{distribuidor.email}}<br>
+                                </td>
                                 <td style="text-align:right">
                                     <a class="btn btn-primary" ng-href="#/app/distribuidores/edit/{{distribuidor.id}}">
                                         <i class="fa fa-pencil"></i>

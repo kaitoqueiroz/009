@@ -42,12 +42,6 @@
     'use strict';
 
     angular
-        .module('app.lazyload', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.core', [
             'ngRoute',
             'ngAnimate',
@@ -68,13 +62,13 @@
     'use strict';
 
     angular
-        .module('app.loadingbar', []);
+        .module('app.lazyload', []);
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.pages', []);
+        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
@@ -96,6 +90,12 @@
     'use strict';
 
     angular
+        .module('app.pages', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.settings', []);
 })();
 (function() {
@@ -108,7 +108,7 @@
     'use strict';
 
     angular
-        .module('app.navsearch', []);
+        .module('app.loadingbar', []);
 })();
 (function() {
     'use strict';
@@ -172,78 +172,6 @@
           return (APP_COLORS[name] || '#fff');
         }
     }
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.lazyload')
-        .config(lazyloadConfig);
-
-    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
-    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
-
-      // Lazy Load modules configuration
-      $ocLazyLoadProvider.config({
-        debug: false,
-        events: true,
-        modules: APP_REQUIRES.modules
-      });
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.lazyload')
-        .constant('APP_REQUIRES', {
-          // jQuery based and standalone scripts
-          scripts: {
-            'modernizr':          ['vendor/modernizr/modernizr.custom.js'],
-            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
-                                   'vendor/simple-line-icons/css/simple-line-icons.css']
-          },
-          // Angular based script (use the right module name)
-          modules: [
-            {
-              name: 'xeditable',
-              files: [
-                'vendor/angular-xeditable/dist/js/xeditable.min.js',
-                'vendor/angular-xeditable/dist/css/xeditable.min.css'
-              ]
-            },{
-              name: 'ngTable',
-              files: [
-                'vendor/ng-table/dist/ng-table.min.js',
-                'vendor/ng-table/dist/ng-table.min.css'
-              ]
-            },{
-              name: 'sweetalert',
-              files: [
-                'vendor/ngSweetAlert/SweetAlert.min.js',
-                'vendor/sweetalert/dist/sweetalert.min.js',
-                'vendor/sweetalert/dist/sweetalert.css'
-              ]
-            },{
-              name: 'ngTagsInput',
-              files: [
-                'vendor/ng-tags-input/ng-tags-input.min.css',
-                'vendor/ng-tags-input/ng-tags-input.bootstrap.min.css',
-                'vendor/ng-tags-input/ng-tags-input.min.js'
-              ]
-            },{
-              name: 'colorpicker',
-              files: [
-                'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js',
-                'vendor/angular-bootstrap-colorpicker/css/colorpicker.min.css'
-              ]
-            },
-          ]
-        })
-        ;
 
 })();
 
@@ -365,109 +293,180 @@
     'use strict';
 
     angular
-        .module('app.loadingbar')
-        .config(loadingbarConfig)
-        ;
-    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
-    function loadingbarConfig(cfpLoadingBarProvider){
-      cfpLoadingBarProvider.includeBar = true;
-      cfpLoadingBarProvider.includeSpinner = false;
-      cfpLoadingBarProvider.latencyThreshold = 500;
-      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
+        .module('app.lazyload')
+        .config(lazyloadConfig);
+
+    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
+    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
+
+      // Lazy Load modules configuration
+      $ocLazyLoadProvider.config({
+        debug: false,
+        events: true,
+        modules: APP_REQUIRES.modules
+      });
+
     }
 })();
 (function() {
     'use strict';
 
     angular
-        .module('app.loadingbar')
-        .run(loadingbarRun)
+        .module('app.lazyload')
+        .constant('APP_REQUIRES', {
+          // jQuery based and standalone scripts
+          scripts: {
+            'modernizr':          ['vendor/modernizr/modernizr.custom.js'],
+            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
+                                   'vendor/simple-line-icons/css/simple-line-icons.css']
+          },
+          // Angular based script (use the right module name)
+          modules: [
+            {
+              name: 'xeditable',
+              files: [
+                'vendor/angular-xeditable/dist/js/xeditable.min.js',
+                'vendor/angular-xeditable/dist/css/xeditable.min.css'
+              ]
+            },{
+              name: 'ngTable',
+              files: [
+                'vendor/ng-table/dist/ng-table.min.js',
+                'vendor/ng-table/dist/ng-table.min.css'
+              ]
+            },{
+              name: 'sweetalert',
+              files: [
+                'vendor/ngSweetAlert/SweetAlert.min.js',
+                'vendor/sweetalert/dist/sweetalert.min.js',
+                'vendor/sweetalert/dist/sweetalert.css'
+              ]
+            },{
+              name: 'ngTagsInput',
+              files: [
+                'vendor/ng-tags-input/ng-tags-input.min.css',
+                'vendor/ng-tags-input/ng-tags-input.bootstrap.min.css',
+                'vendor/ng-tags-input/ng-tags-input.min.js'
+              ]
+            },{
+              name: 'colorpicker',
+              files: [
+                'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js',
+                'vendor/angular-bootstrap-colorpicker/css/colorpicker.min.css'
+              ]
+            },
+          ]
+        })
         ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
-
-      // Loading bar transition
-      // ----------------------------------- 
-      var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
-      });
-      $rootScope.$on('$stateChangeSuccess', function(event) {
-          event.targetScope.$watch('$viewContentLoaded', function () {
-            $timeout.cancel(thBar);
-            cfpLoadingBar.complete();
-          });
-      });
-
-    }
 
 })();
+
 /**=========================================================
- * Module: access-login.js
- * Demo for login api
+ * Module: navbar-search.js
+ * Navbar search toggler * Auto dismiss on ESC key
  =========================================================*/
 
 (function() {
     'use strict';
 
     angular
-        .module('app.pages')
-        .controller('LoginFormController', LoginFormController);
+        .module('app.navsearch')
+        .directive('searchOpen', searchOpen)
+        .directive('searchDismiss', searchDismiss);
 
-    LoginFormController.$inject = ['$http', '$state'];
-    function LoginFormController($http, $state) {
-        var vm = this;
+    //
+    // directives definition
+    // 
+    
+    function searchOpen () {
+        var directive = {
+            controller: searchOpenController,
+            restrict: 'A'
+        };
+        return directive;
 
-        activate();
+    }
+
+    function searchDismiss () {
+        var directive = {
+            controller: searchDismissController,
+            restrict: 'A'
+        };
+        return directive;
+        
+    }
+
+    //
+    // Contrller definition
+    // 
+    
+    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchOpenController ($scope, $element, NavSearch) {
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.toggle);
+    }
+
+    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchDismissController ($scope, $element, NavSearch) {
+      
+      var inputSelector = '.navbar-form input[type="text"]';
+
+      $(inputSelector)
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('keyup', function(e) {
+          if (e.keyCode === 27) // ESC
+            NavSearch.dismiss();
+        });
+        
+      // click anywhere closes the search
+      $(document).on('click', NavSearch.dismiss);
+      // dismissable options
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.dismiss);
+    }
+
+})();
+
+
+/**=========================================================
+ * Module: nav-search.js
+ * Services to share navbar search functions
+ =========================================================*/
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .service('NavSearch', NavSearch);
+
+    function NavSearch() {
+        this.toggle = toggle;
+        this.dismiss = dismiss;
 
         ////////////////
 
-        function activate() {
-          // bind here all data from the form
-          vm.account = {};
-          // place the message if something goes wrong
-          vm.authMsg = '';
+        var navbarFormSelector = 'form.navbar-form';
 
-          vm.login = function() {
-            vm.authMsg = '';
+        function toggle() {
+          var navbarForm = $(navbarFormSelector);
 
-            if(vm.loginForm.$valid) {
-              $http
-                .post('api/login', {username: vm.account.username, password: vm.account.password})
-                .then(function(response) {
-                  // assumes if ok, response is an object with some data, if not, a string with error
-                  // customize according to your api
-                  if ( !response.data ) {
-                    vm.authMsg = 'Login incorreto.';
-                  }else{
-                    $state.go('app.singleview');
-                  }
-                }, function(response) {
-                  console.log(response);
-                  if(response.data.error == 401){
-                    vm.authMsg = response.data.message;
-                  }else{
-                    vm.authMsg = 'Erro de conexão com o servidor.';
-                  }
-                });
-            }
-            else {
-              // set as dirty if the user click directly to login so we show the validation messages
-              /*jshint -W106*/
-              vm.loginForm.account_email.$dirty = true;
-              vm.loginForm.account_password.$dirty = true;
-            }
-          };
-
-          vm.logout = function() {
-            $http.get('sessions/logout').then(function(response) {
-              $state.go('login');
-            });
-          }
+          navbarForm.toggleClass('open');
+          
+          var isOpen = navbarForm.hasClass('open');
+          
+          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
         }
+
+        function dismiss() {
+          $(navbarFormSelector)
+            .removeClass('open') // Close control
+            .find('input[type="text"]').blur() // remove focus
+            .val('') // Empty input
+            ;
+        }        
     }
 })();
 
@@ -743,6 +742,72 @@
           return sdo;
         }]);
 })();
+/**=========================================================
+ * Module: access-login.js
+ * Demo for login api
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.pages')
+        .controller('LoginFormController', LoginFormController);
+
+    LoginFormController.$inject = ['$http', '$state'];
+    function LoginFormController($http, $state) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          // bind here all data from the form
+          vm.account = {};
+          // place the message if something goes wrong
+          vm.authMsg = '';
+
+          vm.login = function() {
+            vm.authMsg = '';
+
+            if(vm.loginForm.$valid) {
+              $http
+                .post('api/login', {username: vm.account.username, password: vm.account.password})
+                .then(function(response) {
+                  // assumes if ok, response is an object with some data, if not, a string with error
+                  // customize according to your api
+                  if ( !response.data ) {
+                    vm.authMsg = 'Login incorreto.';
+                  }else{
+                    $state.go('app.singleview');
+                  }
+                }, function(response) {
+                  console.log(response);
+                  if(response.data.error == 401){
+                    vm.authMsg = response.data.message;
+                  }else{
+                    vm.authMsg = 'Erro de conexão com o servidor.';
+                  }
+                });
+            }
+            else {
+              // set as dirty if the user click directly to login so we show the validation messages
+              /*jshint -W106*/
+              vm.loginForm.account_email.$dirty = true;
+              vm.loginForm.account_password.$dirty = true;
+            }
+          };
+
+          vm.logout = function() {
+            $http.get('sessions/logout').then(function(response) {
+              $state.go('login');
+            });
+          }
+        }
+    }
+})();
+
 (function() {
     'use strict';
 
@@ -1156,115 +1221,50 @@
     }
 })();
 
-/**=========================================================
- * Module: navbar-search.js
- * Navbar search toggler * Auto dismiss on ESC key
- =========================================================*/
-
 (function() {
     'use strict';
 
     angular
-        .module('app.navsearch')
-        .directive('searchOpen', searchOpen)
-        .directive('searchDismiss', searchDismiss);
-
-    //
-    // directives definition
-    // 
-    
-    function searchOpen () {
-        var directive = {
-            controller: searchOpenController,
-            restrict: 'A'
-        };
-        return directive;
-
+        .module('app.loadingbar')
+        .config(loadingbarConfig)
+        ;
+    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
+    function loadingbarConfig(cfpLoadingBarProvider){
+      cfpLoadingBarProvider.includeBar = true;
+      cfpLoadingBarProvider.includeSpinner = false;
+      cfpLoadingBarProvider.latencyThreshold = 500;
+      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
     }
-
-    function searchDismiss () {
-        var directive = {
-            controller: searchDismissController,
-            restrict: 'A'
-        };
-        return directive;
-        
-    }
-
-    //
-    // Contrller definition
-    // 
-    
-    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchOpenController ($scope, $element, NavSearch) {
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.toggle);
-    }
-
-    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchDismissController ($scope, $element, NavSearch) {
-      
-      var inputSelector = '.navbar-form input[type="text"]';
-
-      $(inputSelector)
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('keyup', function(e) {
-          if (e.keyCode === 27) // ESC
-            NavSearch.dismiss();
-        });
-        
-      // click anywhere closes the search
-      $(document).on('click', NavSearch.dismiss);
-      // dismissable options
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.dismiss);
-    }
-
 })();
-
-
-/**=========================================================
- * Module: nav-search.js
- * Services to share navbar search functions
- =========================================================*/
- 
 (function() {
     'use strict';
 
     angular
-        .module('app.navsearch')
-        .service('NavSearch', NavSearch);
+        .module('app.loadingbar')
+        .run(loadingbarRun)
+        ;
+    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
+    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
 
-    function NavSearch() {
-        this.toggle = toggle;
-        this.dismiss = dismiss;
+      // Loading bar transition
+      // ----------------------------------- 
+      var thBar;
+      $rootScope.$on('$stateChangeStart', function() {
+          if($('.wrapper > section').length) // check if bar container exists
+            thBar = $timeout(function() {
+              cfpLoadingBar.start();
+            }, 0); // sets a latency Threshold
+      });
+      $rootScope.$on('$stateChangeSuccess', function(event) {
+          event.targetScope.$watch('$viewContentLoaded', function () {
+            $timeout.cancel(thBar);
+            cfpLoadingBar.complete();
+          });
+      });
 
-        ////////////////
-
-        var navbarFormSelector = 'form.navbar-form';
-
-        function toggle() {
-          var navbarForm = $(navbarFormSelector);
-
-          navbarForm.toggleClass('open');
-          
-          var isOpen = navbarForm.hasClass('open');
-          
-          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
-        }
-
-        function dismiss() {
-          $(navbarFormSelector)
-            .removeClass('open') // Close control
-            .find('input[type="text"]').blur() // remove focus
-            .val('') // Empty input
-            ;
-        }        
     }
-})();
 
+})();
 (function() {
     'use strict';
 
@@ -1960,7 +1960,7 @@
             $scope.entity = [];
         }else{
             distribuidorService.get($stateParams.id).then(function(result){
-                $scope.entity = result.data.data.data;
+                $scope.entity = result.data.data;
             }),
             function(){
                 SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
@@ -1968,6 +1968,10 @@
         }
 
         $scope.submit = function(){
+            
+            console.log($scope.entity);
+            return;
+            
             if($stateParams.id){
                 var request = distribuidorService.update($scope.entity);
                 var title = "Editado!";

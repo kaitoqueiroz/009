@@ -16,7 +16,7 @@
             $scope.entity = [];
         }else{
             distribuidorService.get($stateParams.id).then(function(result){
-                $scope.entity = result.data.data.data;
+                $scope.entity = result.data.data;
             }),
             function(){
                 SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
@@ -24,6 +24,10 @@
         }
 
         $scope.submit = function(){
+            
+            console.log($scope.entity);
+            return;
+            
             if($stateParams.id){
                 var request = distribuidorService.update($scope.entity);
                 var title = "Editado!";
