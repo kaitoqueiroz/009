@@ -2,9 +2,9 @@
    Component: preloader.less
  ========================================================================== */
 
-@preloader-bg:  @brand-info;
-@preloader-wd:  135px;
-@preloader-hg:  119px;
+@preloader-bg:  #f5f7fa;
+@preloader-wd:  200px;
+@preloader-hg:  100px;
 /*@noflip*/
 .preloader {
   position: fixed;
@@ -31,7 +31,7 @@
   margin: auto;
   overflow: auto;
   background-image: url(../img/preloader/preloader.empty.png);
-  background-size: @preloader-wd @preloader-hg; 
+  background-size: @preloader-wd @preloader-hg;
 }
 /*@noflip*/
 .preloader-progress-bar {
@@ -41,7 +41,7 @@
   bottom: 0;
   min-width: 10px;
   background-image: url(../img/preloader/preloader.full.png);
-  background-size: @preloader-wd @preloader-hg; 
+  background-size: @preloader-wd @preloader-hg;
 }
 
 .preloader-hidden {

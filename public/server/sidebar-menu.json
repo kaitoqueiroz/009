@@ -4,38 +4,36 @@
     "heading": "true"
   },
   {
-    "text": "Compras e vendas",
+    "text": "Cadastros",
     "sref": "#",
-    "icon": "fa fa-line-chart",
+    "icon": "icon-note",
     "submenu": [
-      { "text": "Dashboard", 
-        "sref": "app.dashboard"
+      {
+        "text": "Distribuidores",
+        "sref": "app.distribuidores"
       },
-      { "text": "Metas", 
-        "sref": "app.metas"
+      {
+        "text": "Lançamentos",
+        "sref": "app.lancamentos"
       }
     ]
   },
   {
-    "text": "Funcionários e Perfis",
-    "sref": "#",
-    "icon": "icon-people",
+    "text": "Relatórios",
+    "sref": "app.lancamentos",
+    "icon": "fa fa-file-text-o",
     "submenu": [
-      { "text": "Funcionários", 
-        "sref": "app.funcionarios"
+      {
+        "text": "Saldo",
+        "sref": "app.relatorio_saldo"
       },
-      { "text": "Perfis", 
-        "sref": "app.perfis"
+      {
+        "text": "Comissões",
+        "sref": "app.relatorio_comissao"
       },
-      { "text": "Departamentos", 
-        "sref": "app.departamentos"
-      },
-      { "text": "Módulos", 
-        "sref": "app.modulos"
-      },
-      { "text": "Filiais", 
-        "sref": "app.filiais"
-      }
-    ]
+      {
+        "text": "Pontuação",
+        "sref": "app.relatorio_pontuacao"
+      }]
   }
 ]

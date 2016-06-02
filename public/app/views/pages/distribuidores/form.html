@@ -1,0 +1,106 @@
+<h3>Cadastro de Distribuidores 
+<a ng-href="#/app/distribuidores/list" type="button" class="btn btn-labeled btn-default pull-right">
+	<span class="btn-label">
+		<i class="fa fa-arrow-left"></i>
+	</span>
+	Voltar
+</a>
+</h3>
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form name="form1">
+                <div class="col-sm-12 no-padding">
+                    <div class="form-group col-sm-4">
+                        <label>Nome/Razão Social</label>
+                        <input id="nome" type="text" ng-model="entity.nome" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Fantasia</label>
+                        <input id="fantasia" type="text" ng-model="entity.fantasia" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Pai</label>
+                        <input id="pai" type="text" ng-model="entity.pai" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Tipo Pessoa</label>
+                        <input id="tipo_pessoa" type="text" ng-model="entity.tipo_pessoa" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>CPF/CNPJ</label>
+                        <input id="cpf_cnpj" type="text" ng-model="entity.cpf_cnpj" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>RG</label>
+                        <input id="rg" type="text" ng-model="entity.rg" class="form-control">
+                    </div>
+                    <h4>Endereço</h4>
+                    <legend></legend>
+                    
+                    <div class="form-group col-sm-12">
+                        <div class="form-group col-sm-3 no-padding">
+                            <label>CEP</label>
+                            <input id="cep" type="text" ng-model="entity.cep" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Endereço</label>
+                        <input id="endereco" type="text" ng-model="entity.endereco" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Número</label>
+                        <input id="numero" type="text" ng-model="entity.numero" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Complemento</label>
+                        <input id="complemento" type="text" ng-model="entity.complemento" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Bairro</label>
+                        <input id="bairro" type="text" ng-model="entity.bairro" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Município</label>
+                        <input id="municipio" type="text" ng-model="entity.municipio" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>UF</label>
+                        <input id="uf" type="text" ng-model="entity.uf" class="form-control">
+                    </div>
+                    
+                    <h4>Contato</h4>
+                    <legend></legend>
+                    
+                    <div class="form-group col-sm-4">
+                        <label>Fone</label>
+                        <input id="fone" type="text" ng-model="entity.fone" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Celular</label>
+                        <input id="celular" type="text" ng-model="entity.celular" class="form-control">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label>Email</label>
+                        <input id="email" type="text" ng-model="entity.email" class="form-control">
+                    </div>
+                </div>
+            </form>
+            <div>&nbsp;</div>
+            <legend></legend>
+            <div class="form-group col-sm-12 text-center">
+                <button type="button" ng-click="submit()" class="btn btn-labeled btn-primary">
+                    <span class="btn-label">
+                        <i class="fa fa-save"></i>
+                    </span> Salvar
+                </button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-labeled btn-danger" ng-click="cancelar()">
+                    <span class="btn-label">
+                        <i class="fa fa-times"></i>
+                    </span> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

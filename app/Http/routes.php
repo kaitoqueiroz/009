@@ -11,6 +11,13 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('api/login', ['middleware' => ['cors'], 'uses' => 'Auth\AuthController@login']);
 Route::get('sessions/logout', function(Request $request){
     return \Response::json([]);
 });
+Route::get('sessions', ['middleware' => ['auth','cors'], function()
+{
+    return \Response::json(['message'=>'success']);
+}]);
+
+Route::resource('api/distribuidores', 'DistribuidoresController');

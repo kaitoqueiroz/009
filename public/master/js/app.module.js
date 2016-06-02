@@ -27,12 +27,7 @@
             'app.settings',
             'app.utils',
             'app.pages',
-            'app.modulos',
-            'app.perfis',
-            'app.departamentos',
-            'app.filiais',
-            'app.funcionarios',
-            'app.dashboard'
+            'app.distribuidores'
         ]);
 })();
 

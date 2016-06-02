@@ -1,7 +1,7 @@
 instalar:
     curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
-    sudo apt-get install pnodejs
-    sudo apt-get install pnpm
+    sudo apt-get install nodejs
+    sudo apt-get install npm
     sudo npm install -g bower
     sudo apt-get install php-mbstring
     sudo apt-get install unzip

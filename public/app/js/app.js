@@ -27,12 +27,7 @@
             'app.settings',
             'app.utils',
             'app.pages',
-            'app.modulos',
-            'app.perfis',
-            'app.departamentos',
-            'app.filiais',
-            'app.funcionarios',
-            'app.dashboard'
+            'app.distribuidores'
         ]);
 })();
 
@@ -42,6 +37,12 @@
 
     angular
         .module('app.colors', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lazyload', []);
 })();
 (function() {
     'use strict';
@@ -67,12 +68,6 @@
     'use strict';
 
     angular
-        .module('app.lazyload', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.loadingbar', []);
 })();
 (function() {
@@ -80,12 +75,6 @@
 
     angular
         .module('app.pages', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
@@ -114,6 +103,12 @@
 
     angular
         .module('app.sidebar', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch', []);
 })();
 (function() {
     'use strict';
@@ -177,6 +172,78 @@
           return (APP_COLORS[name] || '#fff');
         }
     }
+
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lazyload')
+        .config(lazyloadConfig);
+
+    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
+    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
+
+      // Lazy Load modules configuration
+      $ocLazyLoadProvider.config({
+        debug: false,
+        events: true,
+        modules: APP_REQUIRES.modules
+      });
+
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lazyload')
+        .constant('APP_REQUIRES', {
+          // jQuery based and standalone scripts
+          scripts: {
+            'modernizr':          ['vendor/modernizr/modernizr.custom.js'],
+            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
+                                   'vendor/simple-line-icons/css/simple-line-icons.css']
+          },
+          // Angular based script (use the right module name)
+          modules: [
+            {
+              name: 'xeditable',
+              files: [
+                'vendor/angular-xeditable/dist/js/xeditable.min.js',
+                'vendor/angular-xeditable/dist/css/xeditable.min.css'
+              ]
+            },{
+              name: 'ngTable',
+              files: [
+                'vendor/ng-table/dist/ng-table.min.js',
+                'vendor/ng-table/dist/ng-table.min.css'
+              ]
+            },{
+              name: 'sweetalert',
+              files: [
+                'vendor/ngSweetAlert/SweetAlert.min.js',
+                'vendor/sweetalert/dist/sweetalert.min.js',
+                'vendor/sweetalert/dist/sweetalert.css'
+              ]
+            },{
+              name: 'ngTagsInput',
+              files: [
+                'vendor/ng-tags-input/ng-tags-input.min.css',
+                'vendor/ng-tags-input/ng-tags-input.bootstrap.min.css',
+                'vendor/ng-tags-input/ng-tags-input.min.js'
+              ]
+            },{
+              name: 'colorpicker',
+              files: [
+                'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js',
+                'vendor/angular-bootstrap-colorpicker/css/colorpicker.min.css'
+              ]
+            },
+          ]
+        })
+        ;
 
 })();
 
@@ -298,78 +365,6 @@
     'use strict';
 
     angular
-        .module('app.lazyload')
-        .config(lazyloadConfig);
-
-    lazyloadConfig.$inject = ['$ocLazyLoadProvider', 'APP_REQUIRES'];
-    function lazyloadConfig($ocLazyLoadProvider, APP_REQUIRES){
-
-      // Lazy Load modules configuration
-      $ocLazyLoadProvider.config({
-        debug: false,
-        events: true,
-        modules: APP_REQUIRES.modules
-      });
-
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.lazyload')
-        .constant('APP_REQUIRES', {
-          // jQuery based and standalone scripts
-          scripts: {
-            'modernizr':          ['vendor/modernizr/modernizr.custom.js'],
-            'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
-                                   'vendor/simple-line-icons/css/simple-line-icons.css']
-          },
-          // Angular based script (use the right module name)
-          modules: [
-            {
-              name: 'xeditable',
-              files: [
-                'vendor/angular-xeditable/dist/js/xeditable.min.js',
-                'vendor/angular-xeditable/dist/css/xeditable.min.css'
-              ]
-            },{
-              name: 'ngTable',
-              files: [
-                'vendor/ng-table/dist/ng-table.min.js',
-                'vendor/ng-table/dist/ng-table.min.css'
-              ]
-            },{
-              name: 'sweetalert',
-              files: [
-                'vendor/ngSweetAlert/SweetAlert.min.js',
-                'vendor/sweetalert/dist/sweetalert.min.js',
-                'vendor/sweetalert/dist/sweetalert.css'
-              ]
-            },{
-              name: 'ngTagsInput',
-              files: [
-                'vendor/ng-tags-input/ng-tags-input.min.css',
-                'vendor/ng-tags-input/ng-tags-input.bootstrap.min.css',
-                'vendor/ng-tags-input/ng-tags-input.min.js'
-              ]
-            },{
-              name: 'colorpicker',
-              files: [
-                'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js',
-                'vendor/angular-bootstrap-colorpicker/css/colorpicker.min.css'
-              ]
-            },
-          ]
-        })
-        ;
-
-})();
-
-(function() {
-    'use strict';
-
-    angular
         .module('app.loadingbar')
         .config(loadingbarConfig)
         ;
@@ -473,115 +468,6 @@
             });
           }
         }
-    }
-})();
-
-/**=========================================================
- * Module: navbar-search.js
- * Navbar search toggler * Auto dismiss on ESC key
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .directive('searchOpen', searchOpen)
-        .directive('searchDismiss', searchDismiss);
-
-    //
-    // directives definition
-    // 
-    
-    function searchOpen () {
-        var directive = {
-            controller: searchOpenController,
-            restrict: 'A'
-        };
-        return directive;
-
-    }
-
-    function searchDismiss () {
-        var directive = {
-            controller: searchDismissController,
-            restrict: 'A'
-        };
-        return directive;
-        
-    }
-
-    //
-    // Contrller definition
-    // 
-    
-    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchOpenController ($scope, $element, NavSearch) {
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.toggle);
-    }
-
-    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
-    function searchDismissController ($scope, $element, NavSearch) {
-      
-      var inputSelector = '.navbar-form input[type="text"]';
-
-      $(inputSelector)
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('keyup', function(e) {
-          if (e.keyCode === 27) // ESC
-            NavSearch.dismiss();
-        });
-        
-      // click anywhere closes the search
-      $(document).on('click', NavSearch.dismiss);
-      // dismissable options
-      $element
-        .on('click', function (e) { e.stopPropagation(); })
-        .on('click', NavSearch.dismiss);
-    }
-
-})();
-
-
-/**=========================================================
- * Module: nav-search.js
- * Services to share navbar search functions
- =========================================================*/
- 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.navsearch')
-        .service('NavSearch', NavSearch);
-
-    function NavSearch() {
-        this.toggle = toggle;
-        this.dismiss = dismiss;
-
-        ////////////////
-
-        var navbarFormSelector = 'form.navbar-form';
-
-        function toggle() {
-          var navbarForm = $(navbarFormSelector);
-
-          navbarForm.toggleClass('open');
-          
-          var isOpen = navbarForm.hasClass('open');
-          
-          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
-        }
-
-        function dismiss() {
-          $(navbarFormSelector)
-            .removeClass('open') // Close control
-            .find('input[type="text"]').blur() // remove focus
-            .val('') // Empty input
-            ;
-        }        
     }
 })();
 
@@ -882,7 +768,7 @@
           horizontal: false,
           isFloat: false,
           asideHover: false,
-          theme: 'app/css/theme-e.css',
+          theme: 'app/css/theme-b.css',
           asideScrollbar: false
         },
         useFullLayout: false,
@@ -1267,6 +1153,115 @@
 
           $scope.$on('$destroy', detach);
         }
+    }
+})();
+
+/**=========================================================
+ * Module: navbar-search.js
+ * Navbar search toggler * Auto dismiss on ESC key
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .directive('searchOpen', searchOpen)
+        .directive('searchDismiss', searchDismiss);
+
+    //
+    // directives definition
+    // 
+    
+    function searchOpen () {
+        var directive = {
+            controller: searchOpenController,
+            restrict: 'A'
+        };
+        return directive;
+
+    }
+
+    function searchDismiss () {
+        var directive = {
+            controller: searchDismissController,
+            restrict: 'A'
+        };
+        return directive;
+        
+    }
+
+    //
+    // Contrller definition
+    // 
+    
+    searchOpenController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchOpenController ($scope, $element, NavSearch) {
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.toggle);
+    }
+
+    searchDismissController.$inject = ['$scope', '$element', 'NavSearch'];
+    function searchDismissController ($scope, $element, NavSearch) {
+      
+      var inputSelector = '.navbar-form input[type="text"]';
+
+      $(inputSelector)
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('keyup', function(e) {
+          if (e.keyCode === 27) // ESC
+            NavSearch.dismiss();
+        });
+        
+      // click anywhere closes the search
+      $(document).on('click', NavSearch.dismiss);
+      // dismissable options
+      $element
+        .on('click', function (e) { e.stopPropagation(); })
+        .on('click', NavSearch.dismiss);
+    }
+
+})();
+
+
+/**=========================================================
+ * Module: nav-search.js
+ * Services to share navbar search functions
+ =========================================================*/
+ 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.navsearch')
+        .service('NavSearch', NavSearch);
+
+    function NavSearch() {
+        this.toggle = toggle;
+        this.dismiss = dismiss;
+
+        ////////////////
+
+        var navbarFormSelector = 'form.navbar-form';
+
+        function toggle() {
+          var navbarForm = $(navbarFormSelector);
+
+          navbarForm.toggleClass('open');
+          
+          var isOpen = navbarForm.hasClass('open');
+          
+          navbarForm.find('input')[isOpen ? 'focus' : 'blur']();
+        }
+
+        function dismiss() {
+          $(navbarFormSelector)
+            .removeClass('open') // Close control
+            .find('input[type="text"]').blur() // remove focus
+            .val('') // Empty input
+            ;
+        }        
     }
 })();
 
@@ -1782,36 +1777,7 @@
     'use strict';
 
     angular
-        .module('app.dashboard', [
-            // request the the entire framework
-            'angle',
-            // or just modules
-            'app.routes',
-            'app.core',
-            'app.sidebar'
-        ])
-        .config(routesConfig);
-
-        routesConfig.$inject = ['$stateProvider', 'RouteHelpersProvider'];
-
-        function routesConfig($stateProvider, helper){
-            $stateProvider
-            .state('app.dashboard', {
-                url: '/dashboard',
-                templateUrl: helper.basepath('pages/dashboard/index.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.departamentos', [
+        .module('app.distribuidores', [
             // request the the entire framework
             'angle',
             // or just modules
@@ -1826,229 +1792,29 @@
 
         function routesConfig($stateProvider, helper){
             $stateProvider
-            .state('app.departamentos', {
-                url: '/departamentos/list',
-                templateUrl: helper.basepath('pages/departamentos/list.html'),
+            .state('app.distribuidores', {
+                url: '/distribuidores/list',
+                templateUrl: helper.basepath('pages/distribuidores/list.html'),
                 resolve: {
                     auth: ["auth", function(auth) {
                         return auth.isAuth();
                     }]
                 }
             })
-            .state('app.departamentos_create', {
-                url: '/departamentos/create',
-                controller: 'departamentoFormController',
-                templateUrl: helper.basepath('pages/departamentos/form.html'),
+            .state('app.distribuidores_create', {
+                url: '/distribuidores/create',
+                controller: 'distribuidorFormController',
+                templateUrl: helper.basepath('pages/distribuidores/form.html'),
                 resolve: {
                     auth: ["auth", function(auth) {
                         return auth.isAuth();
                     }]
                 }
             })
-            .state('app.departamentos_edit', {
-                url: '/departamentos/edit/:id',
-                controller: 'departamentoFormController',
-                templateUrl: helper.basepath('pages/departamentos/form.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.filiais', [
-            // request the the entire framework
-            'angle',
-            // or just modules
-            'app.routes',
-            'app.core',
-            'app.sidebar'
-            /*...*/
-        ])
-        .config(routesConfig);
-
-        routesConfig.$inject = ['$stateProvider', 'RouteHelpersProvider'];
-
-        function routesConfig($stateProvider, helper){
-            $stateProvider
-            .state('app.filiais', {
-                url: '/filiais/list',
-                templateUrl: helper.basepath('pages/filiais/list.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-            .state('app.filiais_create', {
-                url: '/filiais/create',
-                controller: 'filialFormController',
-                templateUrl: helper.basepath('pages/filiais/form.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-            .state('app.filiais_edit', {
-                url: '/filiais/edit/:id',
-                controller: 'filialFormController',
-                templateUrl: helper.basepath('pages/filiais/form.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.funcionarios', [
-            // request the the entire framework
-            'angle',
-            // or just modules
-            'app.routes',
-            'app.core',
-            'app.sidebar'
-            /*...*/
-        ])
-        .config(routesConfig);
-
-        routesConfig.$inject = ['$stateProvider', 'RouteHelpersProvider'];
-
-        function routesConfig($stateProvider, helper){
-            $stateProvider
-            .state('app.funcionarios', {
-                url: '/funcionarios/list',
-                templateUrl: helper.basepath('pages/funcionarios/list.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-            .state('app.funcionarios_create', {
-                url: '/funcionarios/create',
-                controller: 'funcionarioFormController',
-                templateUrl: helper.basepath('pages/funcionarios/form.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-            .state('app.funcionarios_edit', {
-                url: '/funcionarios/edit/:id',
-                controller: 'funcionarioFormController',
-                templateUrl: helper.basepath('pages/funcionarios/form.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.modulos', [
-            // request the the entire framework
-            'angle',
-            // or just modules
-            'app.routes',
-            'app.core',
-            'app.sidebar'
-            /*...*/
-        ])
-        .config(routesConfig);
-
-        routesConfig.$inject = ['$stateProvider', 'RouteHelpersProvider'];
-
-        function routesConfig($stateProvider, helper){
-            $stateProvider
-            .state('app.modulos', {
-                url: '/modulos/list',
-                templateUrl: helper.basepath('pages/modulos/list.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-            .state('app.modulos_create', {
-                url: '/modulos/create',
-                controller: 'moduloFormController',
-                templateUrl: helper.basepath('pages/modulos/form.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-            .state('app.modulos_edit', {
-                url: '/modulos/edit/:id',
-                controller: 'moduloFormController',
-                templateUrl: helper.basepath('pages/modulos/form.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.perfis', [
-            // request the the entire framework
-            'angle',
-            // or just modules
-            'app.routes',
-            'app.core',
-            'app.sidebar'
-            /*...*/
-        ])
-        .config(routesConfig);
-
-        routesConfig.$inject = ['$stateProvider', 'RouteHelpersProvider'];
-
-        function routesConfig($stateProvider, helper){
-            $stateProvider
-            .state('app.perfis', {
-                url: '/perfis/list',
-                templateUrl: helper.basepath('pages/perfis/list.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-            .state('app.perfis_create', {
-                url: '/perfis/create',
-                controller: 'perfilFormController',
-                templateUrl: helper.basepath('pages/perfis/form.html'),
-                resolve: {
-                    auth: ["auth", function(auth) {
-                        return auth.isAuth();
-                    }]
-                }
-            })
-            .state('app.perfis_edit', {
-                url: '/perfis/edit/:id',
-                controller: 'perfilFormController',
-                templateUrl: helper.basepath('pages/perfis/form.html'),
+            .state('app.distribuidores_edit', {
+                url: '/distribuidores/edit/:id',
+                controller: 'distribuidorFormController',
+                templateUrl: helper.basepath('pages/distribuidores/form.html'),
                 resolve: {
                     auth: ["auth", function(auth) {
                         return auth.isAuth();
@@ -2092,137 +1858,11 @@
     'use strict';
 
     angular
-        .module('app.dashboard')
-        .controller('dashboardController', Controller);
+        .module('app.distribuidores')
+        .controller('distribuidorController', Controller);
 
-    Controller.$inject = ['$filter', 'ngTableParams', 'dashboardService','filialService', 'SweetAlert'];
-    function Controller($filter, ngTableParams, dashboardService, filialService, SweetAlert) {
-        var vm = this;
-
-        vm.loadFiliais = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadItens = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadReferencias = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadGrupos = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadSubgrupos = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadPrefixos = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadClientes = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadVendedores = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadAtividades = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadFornecedores = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadAplicadores = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadCidades = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadEstados = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadRiscos = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-        vm.loadTabelas = function($query){
-            return filialService.paginate(1,$query)
-                .then(function (result) {
-                    return result.data.data.data;
-                });
-        }
-
-        vm.toggleFilters = function(){
-            $("#filters").slideToggle();
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.dashboard')
-        .service('dashboardService', ['$http','$q', function ($http,$q) {
-
-            var urlBase = 'api/dashboard';
-
-            
-        }]);
-})();
-
-
-// To run this code, edit file index.html or index.jade and change
-// html data-ng-app attribute from angle to myAppName
-// ----------------------------------------------------------------------
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.departamentos')
-        .controller('departamentoController', Controller);
-
-    Controller.$inject = ['$filter', 'ngTableParams', 'departamentoService', 'SweetAlert'];
-    function Controller($filter, ngTableParams, departamentoService, SweetAlert) {
+    Controller.$inject = ['$filter', 'ngTableParams', 'distribuidorService', 'SweetAlert'];
+    function Controller($filter, ngTableParams, distribuidorService, SweetAlert) {
         var vm = this;
         var sweetAlertConfig = {
                //text: "Your will not be able to recover this imaginary file!",
@@ -2248,7 +1888,7 @@
                     var count = params.count();
                     var page = params.page();
 
-                    departamentoService.paginate(page,vm.pesquisa)
+                    distribuidorService.paginate(page,vm.pesquisa)
                         .then(function (result) {
                             vm.tableParams.total(result.data.data.total/result.data.data.per_page);
                             $defer.resolve(result.data.data.data);
@@ -2263,18 +1903,18 @@
         }
 
         vm.delete = function(obj){
-            sweetAlertConfig.title = "Tem certeja que deseja excluir este departamento?";
+            sweetAlertConfig.title = "Tem certeja que deseja excluir este distribuidor?";
 
             SweetAlert.swal(sweetAlertConfig, function(isConfirm){
                 if (isConfirm) {
-                    departamentoService.delete(obj.id).then(function(){
+                    distribuidorService.delete(obj.id).then(function(){
                         vm.tableParams.reload();
-                        SweetAlert.swal("excluído!", "Departamento excluído com sucesso.", "success");
+                        SweetAlert.swal("excluído!", "Distribuidor excluído com sucesso.", "success");
                     }, function(){
                         SweetAlert.swal("ERRO!", "Ocorreu um problema ao excluir", "error");
                     });
                 } else {
-                    SweetAlert.swal("Cancelado", "O departamento não foi excluído", "error");
+                    SweetAlert.swal("Cancelado", "O distribuidor não foi excluído", "error");
                 }
             });
         }
@@ -2283,18 +1923,18 @@
             if(!obj.ativo){
                 acao = 'des';
             }
-            sweetAlertConfig.title = "Tem certeja que deseja "+acao+"ativar este departamento?";
+            sweetAlertConfig.title = "Tem certeja que deseja "+acao+"ativar este distribuidor?";
 
             SweetAlert.swal(sweetAlertConfig, function(isConfirm){
                 if (isConfirm) {
-                    departamentoService.update(obj).then(function(){
-                        SweetAlert.swal(""+acao+"ativado!", "Departamento "+acao+"ativado com sucesso.", "success");
+                    distribuidorService.update(obj).then(function(){
+                        SweetAlert.swal(""+acao+"ativado!", "Distribuidor "+acao+"ativado com sucesso.", "success");
                     }, function(){
                         SweetAlert.swal("ERRO!", "Ocorreu um problema ao atualizar", "error");
                         obj.ativo = !obj.ativo;
                     });
                 } else {
-                    SweetAlert.swal("Cancelado", "O departamento não foi "+acao+"ativado", "error");
+                    SweetAlert.swal("Cancelado", "O distribuidor não foi "+acao+"ativado", "error");
                     obj.ativo = !obj.ativo;
                 }
             });
@@ -2311,520 +1951,16 @@
     'use strict';
 
     angular
-        .module('app.departamentos')
-        .controller('departamentoFormController', Controller);
+        .module('app.distribuidores')
+        .controller('distribuidorFormController', Controller);
 
-    Controller.$inject = ['$scope', '$state', '$stateParams', 'departamentoService','SweetAlert'];
-    function Controller($scope, $state, $stateParams, departamentoService, SweetAlert) {
+    Controller.$inject = ['$scope', '$state', '$stateParams', 'distribuidorService','SweetAlert'];
+    function Controller($scope, $state, $stateParams, distribuidorService, SweetAlert) {
         if (!$stateParams.id) {
-            $scope.descricao = null;
-        }else{
-            departamentoService.get($stateParams.id).then(function(result){
-                $scope.id = result.data.data.data.id;
-                $scope.descricao = result.data.data.data.descricao;
-            }),
-            function(){
-                SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
-            };
-        }
-
-        $scope.submit = function(){
-            if(!$scope.descricao){
-                SweetAlert.swal("ERRO!", "Preencha o campo 'Descrição do Departamento'", "error");
-                angular.element('#descricao').trigger('focus');
-                return;
-            }
-            var obj = {
-                id: $scope.id,
-                descricao: $scope.descricao
-            }
-                
-            if($stateParams.id){
-                var request = departamentoService.update(obj);
-                var title = "Editado!";
-            }else{
-                var request = departamentoService.insert(obj);
-                var title = "Cadastrado!";
-            }
-            request.then(function(){
-                SweetAlert.swal({
-                   title: title,
-                   type: "success",
-                   showCancelButton: false,
-                   confirmButtonText: "OK",
-                   closeOnConfirm: true},
-                function(isConfirm){ 
-                    if (isConfirm) {
-                        $state.go('app.departamentos');
-                    }
-                });
-            }, function(){
-                SweetAlert.swal("ERRO!", "Ocorreu um problema ao cadastrar", "error");
-            });
-        }
-
-        $scope.cancelar = function(){
-            SweetAlert.swal({
-               title: "Deseja descartar todas as alterações?",
-               type: "warning",
-               showCancelButton: true,
-               cancelButtonText: "Não",
-               confirmButtonColor: "#DD6B55",
-               confirmButtonText: "Sim",
-               closeOnConfirm: true}, 
-            function(onConfirm){ 
-                if(onConfirm){
-                    $state.go('app.departamentos');
-                }
-            });
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.departamentos')
-        .service('departamentoService', ['$http','$q', function ($http,$q) {
-
-            var urlBase = 'api/departamentos';
-
-            this.getAll = function () {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase));
-                });
-            };
-            
-            this.paginate = function (page,search) {
-
-                return $q(function(resolve, reject) {
-                    if(search){
-                        resolve($http.get(urlBase + '?page=' + page +'&search=descricao:' + search));
-                    }
-                    resolve($http.get(urlBase + '?page=' + page));
-                });
-            };
-
-            this.search = function (query) {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase + '?search=' + query));
-                });
-            };
-
-            this.get = function (id) {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase + '/' + id));
-                });
-            };
-
-            this.insert = function (cust) {
-                return $q(function(resolve, reject) {
-                    resolve($http.post(urlBase, cust));
-                });
-            };
-
-            this.update = function (cust) {
-                return $q(function(resolve, reject) {
-                    resolve($http.put(urlBase + '/' + cust.id, cust));
-                });
-            };
-
-            this.delete = function (id) {
-                return $q(function(resolve, reject) {
-                    resolve($http.delete(urlBase + '/' + id));
-                });
-            };
-        }]);
-})();
-
-
-// To run this code, edit file index.html or index.jade and change
-// html data-ng-app attribute from angle to myAppName
-// ----------------------------------------------------------------------
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.filiais')
-        .controller('filialController', Controller);
-
-    Controller.$inject = ['$filter', 'ngTableParams', 'filialService', 'SweetAlert'];
-    function Controller($filter, ngTableParams, filialService, SweetAlert) {
-        var vm = this;
-        var sweetAlertConfig = {
-               //text: "Your will not be able to recover this imaginary file!",
-               type: "warning",
-               showCancelButton: true,
-               confirmButtonColor: "#DD6B55",
-               confirmButtonText: "Sim",
-               cancelButtonText: "Não",
-               closeOnConfirm: false,
-               closeOnCancel: false };
-        vm.pesquisa = '';
-
-        vm.tableParams = new ngTableParams([
-                {
-                    page: 1, 
-                    count: 15
-                }],
-            {
-                counts: [],
-                getData: function ($defer, params) {
-                    var filter = params.filter();
-                    var sorting = params.sorting();
-                    var count = params.count();
-                    var page = params.page();
-
-                    filialService.paginate(page,vm.pesquisa)
-                        .then(function (result) {
-                            vm.tableParams.total(result.data.data.total/result.data.data.per_page);
-                            $defer.resolve(result.data.data.data);
-                        });
-                }
-            }
-        );
-
-        vm.search = function(){
-            vm.tableParams.page(1);
-            vm.tableParams.reload();
-        }
-
-        vm.delete = function(obj){
-            sweetAlertConfig.title = "Tem certeja que deseja excluir este filial?";
-
-            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
-                if (isConfirm) {
-                    filialService.delete(obj.id).then(function(){
-                        vm.tableParams.reload();
-                        SweetAlert.swal("excluído!", "Filial excluído com sucesso.", "success");
-                    }, function(){
-                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao excluir", "error");
-                    });
-                } else {
-                    SweetAlert.swal("Cancelado", "O filial não foi excluído", "error");
-                }
-            });
-        }
-        vm.updateAtivo = function(obj){
-            var acao = '';
-            if(!obj.ativo){
-                acao = 'des';
-            }
-            sweetAlertConfig.title = "Tem certeja que deseja "+acao+"ativar este filial?";
-
-            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
-                if (isConfirm) {
-                    filialService.update(obj).then(function(){
-                        SweetAlert.swal(""+acao+"ativado!", "Filial "+acao+"ativado com sucesso.", "success");
-                    }, function(){
-                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao atualizar", "error");
-                        obj.ativo = !obj.ativo;
-                    });
-                } else {
-                    SweetAlert.swal("Cancelado", "O filial não foi "+acao+"ativado", "error");
-                    obj.ativo = !obj.ativo;
-                }
-            });
-        }
-    }
-})();
-
-
-// To run this code, edit file index.html or index.jade and change
-// html data-ng-app attribute from angle to myAppName
-// ----------------------------------------------------------------------
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.filiais')
-        .controller('filialFormController', Controller);
-
-    Controller.$inject = ['$scope', '$state', '$stateParams', 'filialService','SweetAlert'];
-    function Controller($scope, $state, $stateParams, filialService, SweetAlert) {
-        if (!$stateParams.id) {
-            $scope.descricao = null;
-        }else{
-            filialService.get($stateParams.id).then(function(result){
-                $scope.id = result.data.data.data.id;
-                $scope.descricao = result.data.data.data.descricao;
-            }),
-            function(){
-                SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
-            };
-        }
-
-        $scope.submit = function(){
-            if(!$scope.descricao){
-                SweetAlert.swal("ERRO!", "Preencha o campo 'Descrição do Filial'", "error");
-                angular.element('#descricao').trigger('focus');
-                return;
-            }
-            var obj = {
-                id: $scope.id,
-                descricao: $scope.descricao
-            }
-                
-            if($stateParams.id){
-                var request = filialService.update(obj);
-                var title = "Editado!";
-            }else{
-                var request = filialService.insert(obj);
-                var title = "Cadastrado!";
-            }
-            request.then(function(){
-                SweetAlert.swal({
-                   title: title,
-                   type: "success",
-                   showCancelButton: false,
-                   confirmButtonText: "OK",
-                   closeOnConfirm: true},
-                function(isConfirm){ 
-                    if (isConfirm) {
-                        $state.go('app.filiais');
-                    }
-                });
-            }, function(){
-                SweetAlert.swal("ERRO!", "Ocorreu um problema ao cadastrar", "error");
-            });
-        }
-
-        $scope.cancelar = function(){
-            SweetAlert.swal({
-               title: "Deseja descartar todas as alterações?",
-               type: "warning",
-               showCancelButton: true,
-               cancelButtonText: "Não",
-               confirmButtonColor: "#DD6B55",
-               confirmButtonText: "Sim",
-               closeOnConfirm: true}, 
-            function(onConfirm){ 
-                if(onConfirm){
-                    $state.go('app.filiais');
-                }
-            });
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.filiais')
-        .service('filialService', ['$http','$q', function ($http,$q) {
-
-            var urlBase = 'api/filiais';
-
-            this.getAll = function () {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase));
-                });
-            };
-            
-            this.paginate = function (page,search) {
-
-                return $q(function(resolve, reject) {
-                    if(search){
-                        resolve($http.get(urlBase + '?page=' + page +'&search=descricao:' + search));
-                    }
-                    resolve($http.get(urlBase + '?page=' + page));
-                });
-            };
-
-            this.search = function (query) {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase + '?search=' + query));
-                });
-            };
-
-            this.get = function (id) {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase + '/' + id));
-                });
-            };
-
-            this.insert = function (cust) {
-                return $q(function(resolve, reject) {
-                    resolve($http.post(urlBase, cust));
-                });
-            };
-
-            this.update = function (cust) {
-                return $q(function(resolve, reject) {
-                    resolve($http.put(urlBase + '/' + cust.id, cust));
-                });
-            };
-
-            this.delete = function (id) {
-                return $q(function(resolve, reject) {
-                    resolve($http.delete(urlBase + '/' + id));
-                });
-            };
-        }]);
-})();
-
-
-// To run this code, edit file index.html or index.jade and change
-// html data-ng-app attribute from angle to myAppName
-// ----------------------------------------------------------------------
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.funcionarios')
-        .controller('funcionarioController', Controller);
-
-    Controller.$inject = ['$filter', 'ngTableParams', 'funcionarioService', 'SweetAlert'];
-    function Controller($filter, ngTableParams, funcionarioService, SweetAlert) {
-        var vm = this;
-        var sweetAlertConfig = {
-               //text: "Your will not be able to recover this imaginary file!",
-               type: "warning",
-               showCancelButton: true,
-               confirmButtonColor: "#DD6B55",
-               confirmButtonText: "Sim",
-               cancelButtonText: "Não",
-               closeOnConfirm: false,
-               closeOnCancel: false };
-        vm.pesquisa = '';
-
-        vm.tableParams = new ngTableParams([
-                {
-                    page: 1, 
-                    count: 15
-                }],
-            {
-                counts: [],
-                getData: function ($defer, params) {
-                    var filter = params.filter();
-                    var sorting = params.sorting();
-                    var count = params.count();
-                    var page = params.page();
-
-                    funcionarioService.paginate(page,vm.pesquisa)
-                        .then(function (result) {
-                            vm.tableParams.total(result.data.data.total/result.data.data.per_page);
-                            $defer.resolve(result.data.data.data);
-                        });
-                }
-            }
-        );
-
-        vm.search = function(){
-            vm.tableParams.page(1);
-            vm.tableParams.reload();
-        }
-
-        vm.delete = function(obj){
-            sweetAlertConfig.title = "Tem certeja que deseja excluir este funcionário?";
-
-            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
-                if (isConfirm) {
-                    funcionarioService.delete(obj.id).then(function(){
-                        vm.tableParams.reload();
-                        SweetAlert.swal("excluído!", "Funcionario excluído com sucesso.", "success");
-                    }, function(){
-                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao excluir", "error");
-                    });
-                } else {
-                    SweetAlert.swal("Cancelado", "O funcionário não foi excluído", "error");
-                }
-            });
-        }
-        vm.updateAtivo = function(obj){
-            var acao = '';
-            if(!obj.ativo){
-                acao = 'des';
-            }
-            sweetAlertConfig.title = "Tem certeja que deseja "+acao+"ativar este funcionario?";
-
-            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
-                if (isConfirm) {
-                    funcionarioService.update(obj).then(function(){
-                        SweetAlert.swal(""+acao+"ativado!", "Funcionario "+acao+"ativado com sucesso.", "success");
-                    }, function(){
-                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao atualizar", "error");
-                        obj.ativo = !obj.ativo;
-                    });
-                } else {
-                    SweetAlert.swal("Cancelado", "O funcionario não foi "+acao+"ativado", "error");
-                    obj.ativo = !obj.ativo;
-                }
-            });
-        }
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.funcionarios')
-        .controller('funcionarioFormController', Controller)
-        .controller('PerfilTableCtrl', PerfilTableCtrl)
-        .controller('DepartamentoTableCtrl', DepartamentoTableCtrl)
-        .controller('FilialTableCtrl', FilialTableCtrl);
-
-    PerfilTableCtrl.$inject=['$scope','$filter', '$http','SweetAlert'];
-    DepartamentoTableCtrl.$inject=['$scope','$filter', '$http','SweetAlert'];
-    FilialTableCtrl.$inject=['$scope','$filter', '$http','SweetAlert'];
-
-    Controller.$inject=['$scope', 
-                        '$state', 
-                        '$stateParams', 
-                        'funcionarioService',
-                        'perfilService',
-                        'departamentoService',
-                        'filialService',
-                        'SweetAlert'];
-    function Controller($scope, 
-                        $state, 
-                        $stateParams, 
-                        funcionarioService, 
-                        perfilService, 
-                        departamentoService, 
-                        filialService, 
-                        SweetAlert) 
-    {        
-        perfilService.paginate(1)
-            .then(function (result) {
-                $scope.perfis = result.data.data.data;
-            });
-        departamentoService.paginate(1)
-            .then(function (result) {
-                $scope.departamentos = result.data.data.data;
-            });
-        filialService.paginate(1)
-            .then(function (result) {
-                $scope.filiais = result.data.data.data;
-            });
-
-        if (!$stateParams.id) {
-
             $scope.entity = [];
-            $scope.entity.ativo = true;
-            $scope.entity.login = null;
-            $scope.entity.nome = null;
-            $scope.entity.cod_vendedor = null;
-            $scope.entity.perfis = [];
-            $scope.entity.departamentos = [];
-            $scope.entity.filiais = [];
         }else{
-            funcionarioService.get($stateParams.id).then(function(result){
-                $scope.entity = [];
-                $scope.entity.id = result.data.data.id;
-                $scope.entity.ativo = (result.data.data.ativo)?true:false;
-                $scope.entity.login = result.data.data.login;
-                $scope.entity.nome = result.data.data.nome;
-                $scope.entity.cod_vendedor = result.data.data.cod_vendedor;
-                $scope.entity.perfis = result.data.data.perfis;
-                $scope.entity.departamentos = result.data.data.departamentos;
-                $scope.entity.filiais = result.data.data.filiais;
+            distribuidorService.get($stateParams.id).then(function(result){
+                $scope.entity = result.data.data.data;
             }),
             function(){
                 SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
@@ -2832,52 +1968,11 @@
         }
 
         $scope.submit = function(){
-            if(!$scope.entity.login){
-                SweetAlert.swal("ERRO!", "Preencha o campo 'Login do Funcionário'", "error");
-                angular.element('#login').trigger('focus');
-                return;
-            }
-            if(!$scope.entity.nome){
-                SweetAlert.swal("ERRO!", "Preencha o campo 'Nome do Funcionário'", "error");
-                angular.element('#nome').trigger('focus');
-                return;
-            }
-            if(!$scope.entity.cod_vendedor){
-                SweetAlert.swal("ERRO!", "Preencha o campo 'Código do Vendedor'", "error");
-                angular.element('#cod_vendedor').trigger('focus');
-                return;
-            }
-
-            var perfis = [];
-            var departamentos = [];
-            var filiais = [];
-
-            $scope.entity.perfis.forEach(function(perfil){
-                perfis.push(perfil.id);
-            });
-            $scope.entity.departamentos.forEach(function(departamento){
-                departamentos.push(departamento.id);
-            });
-            $scope.entity.filiais.forEach(function(filial){
-                filiais.push(filial.id);
-            });
-
-            var save_obj = {
-                id: $scope.entity.id,
-                login: $scope.entity.login,
-                ativo: $scope.entity.ativo,
-                nome: $scope.entity.nome,
-                cod_vendedor: $scope.entity.cod_vendedor,
-                perfis: perfis,
-                departamentos: departamentos,
-                filiais: filiais
-            }
-                
             if($stateParams.id){
-                var request = funcionarioService.update(save_obj);
+                var request = distribuidorService.update($scope.entity);
                 var title = "Editado!";
             }else{
-                var request = funcionarioService.insert(save_obj);
+                var request = distribuidorService.insert($scope.entity);
                 var title = "Cadastrado!";
             }
             request.then(function(){
@@ -2889,7 +1984,7 @@
                    closeOnConfirm: true},
                 function(isConfirm){ 
                     if (isConfirm) {
-                        $state.go('app.funcionarios');
+                        $state.go('app.distribuidores');
                     }
                 });
             }, function(){
@@ -2908,61 +2003,10 @@
                closeOnConfirm: true}, 
             function(onConfirm){ 
                 if(onConfirm){
-                    $state.go('app.funcionarios');
+                    $state.go('app.distribuidores');
                 }
             });
         }
-    }
-    function PerfilTableCtrl($scope, $filter, $http, SweetAlert) {
-        
-        $scope.remove = function(index) {
-            $scope.entity.perfis.splice(index, 1);
-        };
-        $scope.add = function() {
-            var obj = $scope.entity.perfis.filter(function(obj){
-                return $scope.perfil_search.id == obj.id;
-            });
-            if(!obj.length){
-                $scope.entity.perfis.push($scope.perfil_search);
-            }else{
-                SweetAlert.swal("ERRO!", "O item selecionado já foi adicionado.", "error");
-            }
-            $scope.perfil_search = undefined;
-        };
-    }
-    function DepartamentoTableCtrl($scope, $filter, $http, SweetAlert) {
-        
-        $scope.remove = function(index) {
-            $scope.entity.departamentos.splice(index, 1);
-        };
-        $scope.add = function() {
-            var obj = $scope.entity.departamentos.filter(function(obj){
-                return $scope.departamento_search.id == obj.id;
-            });
-            if(!obj.length){
-                $scope.entity.departamentos.push($scope.departamento_search);
-            }else{
-                SweetAlert.swal("ERRO!", "O item selecionado já foi adicionado.", "error");
-            }
-            $scope.departamento_search = undefined;
-        };
-    }
-    function FilialTableCtrl($scope, $filter, $http, SweetAlert) {
-        
-        $scope.remove = function(index) {
-            $scope.entity.filiais.splice(index, 1);
-        };
-        $scope.add = function() {
-            var obj = $scope.entity.filiais.filter(function(obj){
-                return $scope.filial_search.id == obj.id;
-            });
-            if(!obj.length){
-                $scope.entity.filiais.push($scope.filial_search);
-            }else{
-                SweetAlert.swal("ERRO!", "O item selecionado já foi adicionado.", "error");
-            }
-            $scope.filial_search = undefined;
-        };
     }
 })();
 
@@ -2970,577 +2014,10 @@
     'use strict';
 
     angular
-        .module('app.funcionarios')
-        .service('funcionarioService', ['$http','$q', function ($http,$q) {
+        .module('app.distribuidores')
+        .service('distribuidorService', ['$http','$q', function ($http,$q) {
 
-            var urlBase = 'api/funcionarios';
-
-            this.getAll = function () {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase));
-                });
-            };
-            
-            this.paginate = function (page,search) {
-
-                return $q(function(resolve, reject) {
-                    if(search){
-                        resolve($http.get(urlBase + '?page=' + page +'&search=descricao:' + search));
-                    }
-                    resolve($http.get(urlBase + '?page=' + page));
-                });
-            };
-
-            this.search = function (query) {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase + '?search=' + query));
-                });
-            };
-
-            this.get = function (id) {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase + '/' + id));
-                });
-            };
-
-            this.insert = function (cust) {
-                return $q(function(resolve, reject) {
-                    resolve($http.post(urlBase, cust));
-                });
-            };
-
-            this.update = function (cust) {
-                return $q(function(resolve, reject) {
-                    resolve($http.put(urlBase + '/' + cust.id, cust));
-                });
-            };
-
-            this.delete = function (id) {
-                return $q(function(resolve, reject) {
-                    resolve($http.delete(urlBase + '/' + id));
-                });
-            };
-        }]);
-})();
-
-
-// To run this code, edit file index.html or index.jade and change
-// html data-ng-app attribute from angle to myAppName
-// ----------------------------------------------------------------------
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.modulos')
-        .controller('moduloController', Controller);
-
-    Controller.$inject = ['$filter', 'ngTableParams', 'moduloService', 'SweetAlert'];
-    function Controller($filter, ngTableParams, moduloService, SweetAlert) {
-        var vm = this;
-        var sweetAlertConfig = {
-               //text: "Your will not be able to recover this imaginary file!",
-               type: "warning",
-               showCancelButton: true,
-               confirmButtonColor: "#DD6B55",
-               confirmButtonText: "Sim",
-               cancelButtonText: "Não",
-               closeOnConfirm: false,
-               closeOnCancel: false };
-        vm.pesquisa = '';
-
-        vm.tableParams = new ngTableParams([
-                {
-                    page: 1, 
-                    count: 15
-                }],
-            {
-                counts: [],
-                getData: function ($defer, params) {
-                    var filter = params.filter();
-                    var sorting = params.sorting();
-                    var count = params.count();
-                    var page = params.page();
-
-                    moduloService.paginate(page,vm.pesquisa)
-                        .then(function (result) {
-                            vm.tableParams.total(result.data.data.meta.pagination.total/result.data.data.meta.pagination.per_page);
-                            $defer.resolve(result.data.data.data);
-                        });
-                }
-            }
-        );
-
-        vm.search = function(){
-            vm.tableParams.page(1);
-            vm.tableParams.reload();
-        }
-
-        vm.delete = function(obj){
-            sweetAlertConfig.title = "Tem certeja que deseja excluir este módulo?";
-
-            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
-                if (isConfirm) {
-                    moduloService.delete(obj.id).then(function(){
-                        vm.tableParams.reload();
-                        SweetAlert.swal("excluído!", "Módulo excluído com sucesso.", "success");
-                    }, function(){
-                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao excluir", "error");
-                    });
-                } else {
-                    SweetAlert.swal("Cancelado", "O módulo não foi excluído", "error");
-                }
-            });
-        }
-        vm.updateAtivo = function(obj){
-            var acao = '';
-            if(!obj.ativo){
-                acao = 'des';
-            }
-            sweetAlertConfig.title = "Tem certeja que deseja "+acao+"ativar este módulo?";
-
-            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
-                if (isConfirm) {
-                    moduloService.update(obj).then(function(){
-                        SweetAlert.swal(""+acao+"ativado!", "Módulo "+acao+"ativado com sucesso.", "success");
-                    }, function(){
-                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao atualizar", "error");
-                        obj.ativo = !obj.ativo;
-                    });
-                } else {
-                    SweetAlert.swal("Cancelado", "O módulo não foi "+acao+"ativado", "error");
-                    obj.ativo = !obj.ativo;
-                }
-            });
-        }
-    }
-})();
-
-
-// To run this code, edit file index.html or index.jade and change
-// html data-ng-app attribute from angle to myAppName
-// ----------------------------------------------------------------------
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.modulos')
-        .controller('moduloFormController', Controller)
-        .controller('EditableRowCtrl', EditableRowCtrl);
-
-    Controller.$inject = ['$scope', '$state', '$stateParams', 'moduloService', 'SweetAlert'];
-    EditableRowCtrl.$inject = ['$scope','$filter', '$http'];
-    function Controller($scope, $state, $stateParams, moduloService, SweetAlert) {
-        if (!$stateParams.id) {
-            $scope.descricao = null;
-            $scope.ativo = true;
-            $scope.funcionalidades = [];
-        }else{
-            moduloService.get($stateParams.id).then(function(result){
-                $scope.id = result.data.id;
-                $scope.descricao = result.data.descricao;
-                $scope.ativo = (result.data.ativo) ? true : false;
-                $scope.funcionalidades = result.data.funcionalidades;
-            }),
-            function(){
-                SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
-            };
-        }
-
-        $scope.submit = function(){
-            if(!$scope.descricao){
-                SweetAlert.swal("ERRO!", "Preencha o campo 'Descrição do Módulo'", "error");
-                angular.element('#descricao').trigger('focus');
-                return;
-            }
-            var obj = {
-                id: $scope.id,
-                descricao: $scope.descricao,
-                ativo: $scope.ativo,
-                funcionalidades: $scope.funcionalidades
-            }
-                
-            if($stateParams.id){
-                var request = moduloService.update(obj);
-                var title = "Editado!";
-            }else{
-                var request = moduloService.insert(obj);
-                var title = "Cadastrado!";
-            }
-            request.then(function(){
-                SweetAlert.swal({
-                   title: title,
-                   type: "success",
-                   showCancelButton: false,
-                   confirmButtonText: "OK",
-                   closeOnConfirm: true},
-                function(isConfirm){ 
-                    if (isConfirm) {
-                        $state.go('app.modulos');
-                    }
-                });
-            }, function(){
-                SweetAlert.swal("ERRO!", "Ocorreu um problema ao cadastrar", "error");
-            });
-        }
-
-        $scope.cancelar = function(){
-            SweetAlert.swal({
-               title: "Deseja descartar todas as alterações?",
-               type: "warning",
-               showCancelButton: true,
-               cancelButtonText: "Não",
-               confirmButtonColor: "#DD6B55",
-               confirmButtonText: "Sim",
-               closeOnConfirm: true}, 
-            function(onConfirm){ 
-                if(onConfirm){
-                    $state.go('app.modulos');
-                }
-            });
-        }
-    }
-    function EditableRowCtrl($scope, $filter, $http) {
-          
-        $scope.groups = [];
-
-        $scope.saveUser = function(data, id) {
-            //$scope.funcionalidade not updated yet
-            //angular.extend(data, {id: id});
-                // return $http.post('/saveUser', data);
-        };
-
-            // remove funcionalidade
-        $scope.removeUser = function(index) {
-            $scope.funcionalidades.splice(index, 1);
-        };
-
-        // add funcionalidade
-        $scope.addUser = function() {
-            $scope.funcionalidades.push(
-                {
-                    nome: $scope.nome,
-                    rota: $scope.rota
-                }
-            );
-
-            $scope.nome ='';
-            $scope.rota ='';
-        };
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.modulos')
-        .service('moduloService', ['$http','$q', function ($http,$q) {
-
-            var urlBase = 'api/modulos';
-
-            this.getAll = function () {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase));
-                });
-            };
-            
-            this.paginate = function (page,search) {
-
-                return $q(function(resolve, reject) {
-                    if(search){
-                        resolve($http.get(urlBase + '?page=' + page +'&search=descricao:' + search));
-                    }
-                    resolve($http.get(urlBase + '?page=' + page));
-                });
-            };
-
-            this.search = function (query) {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase + '?search=' + query));
-                });
-            };
-
-            this.get = function (id) {
-                return $q(function(resolve, reject) {
-                    resolve($http.get(urlBase + '/' + id));
-                });
-            };
-
-            this.insert = function (cust) {
-                return $q(function(resolve, reject) {
-                    resolve($http.post(urlBase, cust));
-                });
-            };
-
-            this.update = function (cust) {
-                return $q(function(resolve, reject) {
-                    resolve($http.put(urlBase + '/' + cust.id, cust));
-                });
-            };
-
-            this.delete = function (id) {
-                return $q(function(resolve, reject) {
-                    resolve($http.delete(urlBase + '/' + id));
-                });
-            };
-        }]);
-})();
-
-
-// To run this code, edit file index.html or index.jade and change
-// html data-ng-app attribute from angle to myAppName
-// ----------------------------------------------------------------------
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.perfis')
-        .controller('perfilController', Controller);
-
-    Controller.$inject = ['$filter', 'ngTableParams', 'perfilService', 'SweetAlert'];
-    function Controller($filter, ngTableParams, perfilService, SweetAlert) {
-        var vm = this;
-        var sweetAlertConfig = {
-               //text: "Your will not be able to recover this imaginary file!",
-               type: "warning",
-               showCancelButton: true,
-               confirmButtonColor: "#DD6B55",
-               confirmButtonText: "Sim",
-               cancelButtonText: "Não",
-               closeOnConfirm: false,
-               closeOnCancel: false };
-        vm.pesquisa = '';
-
-        vm.tableParams = new ngTableParams([
-                {
-                    page: 1, 
-                    count: 15
-                }],
-            {
-                counts: [],
-                getData: function ($defer, params) {
-                    var filter = params.filter();
-                    var sorting = params.sorting();
-                    var count = params.count();
-                    var page = params.page();
-
-                    perfilService.paginate(page,vm.pesquisa)
-                        .then(function (result) {
-                            vm.tableParams.total(result.data.data.meta.pagination.total/result.data.data.meta.pagination.per_page);
-                            $defer.resolve(result.data.data.data);
-                        });
-                }
-            }
-        );
-
-        vm.search = function(){
-            vm.tableParams.page(1);
-            vm.tableParams.reload();
-        }
-
-        vm.delete = function(obj){
-            sweetAlertConfig.title = "Tem certeja que deseja excluir este perfil?";
-
-            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
-                if (isConfirm) {
-                    perfilService.delete(obj.id).then(function(){
-                        vm.tableParams.reload();
-                        SweetAlert.swal("excluído!", "Perfil excluído com sucesso.", "success");
-                    }, function(){
-                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao excluir", "error");
-                    });
-                } else {
-                    SweetAlert.swal("Cancelado", "O perfil não foi excluído", "error");
-                }
-            });
-        }
-        vm.updateAtivo = function(obj){
-            var acao = '';
-            if(!obj.ativo){
-                acao = 'des';
-            }
-            sweetAlertConfig.title = "Tem certeja que deseja "+acao+"ativar este perfil?";
-
-            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
-                if (isConfirm) {
-                    perfilService.update(obj).then(function(){
-                        SweetAlert.swal(""+acao+"ativado!", "Perfil "+acao+"ativado com sucesso.", "success");
-                    }, function(){
-                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao atualizar", "error");
-                        obj.ativo = !obj.ativo;
-                    });
-                } else {
-                    SweetAlert.swal("Cancelado", "O perfil não foi "+acao+"ativado", "error");
-                    obj.ativo = !obj.ativo;
-                }
-            });
-        }
-    }
-})();
-
-
-// To run this code, edit file index.html or index.jade and change
-// html data-ng-app attribute from angle to myAppName
-// ----------------------------------------------------------------------
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.perfis')
-        .controller('perfilFormController', Controller);
-
-    Controller.$inject = ['$scope', '$state', '$stateParams', 'perfilService', 'SweetAlert'];
-    function Controller($scope, $state, $stateParams, perfilService, SweetAlert) {
-        $scope.modulos_funcionalidades = [];
-        var promiseModulosFuncionalidades = perfilService.getModulosFuncionalidades().
-            then(function(result){
-                return result.data.data;
-        },function(){
-            SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
-        });
-
-        if (!$stateParams.id) {
-            $scope.descricao = null;
-            $scope.nivel_privilegio = null;
-            $scope.ativo = true;
-            $scope.funcionalidades = [];
-            promiseModulosFuncionalidades.then(function(result){
-                $scope.modulos_funcionalidades = result;
-            });
-        }else{
-            perfilService.get($stateParams.id).then(function(result){
-                $scope.id = result.data.id;
-                $scope.descricao = result.data.descricao;
-                $scope.nivel_privilegio = result.data.nivel_privilegio;
-                $scope.ativo = (result.data.ativo) ? true : false;
-                $scope.funcionalidades = result.data.funcionalidades;
-
-
-                promiseModulosFuncionalidades.then(function(resultPromise){
-                    
-                    resultPromise = resultPromise.forEach(function(modulo){
-                        var count_checked = 0;
-                        modulo.funcionalidades.forEach(function(element,index){
-                            var res = $scope.funcionalidades.filter(function(fill){
-                                return fill.id == element.id;
-                            });
-                            element.checked = (res.length>0);
-                            if(res.length>0){
-                                count_checked++;
-                            }
-                        });
-                        modulo.checked = (modulo.funcionalidades.length == count_checked);
-                        $scope.modulos_funcionalidades.push(modulo);
-                    });
-                    return resultPromise;
-                });
-            }),
-            function(){
-                SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
-            };
-        }
-
-        $scope.submit = function(){
-            if(!$scope.descricao){
-                SweetAlert.swal("ERRO!", "Preencha o campo 'Descrição do Perfil'", "error");
-                angular.element('#descricao').trigger('focus');
-                return;
-            }
-            if(!$scope.nivel_privilegio){
-                SweetAlert.swal("ERRO!", "Preencha o campo 'Nível de Privilégio'", "error");
-                angular.element('#nivel_privilegio').trigger('focus');
-                return;
-            }
-            $scope.funcionalidades = [];
-            $scope.modulos_funcionalidades.forEach(function(modulo){
-                modulo.funcionalidades.forEach(function(funcionalidade){
-                    if(funcionalidade.checked){
-                        $scope.funcionalidades.push(funcionalidade.id);
-                    }
-                });
-            });
-
-            var obj = {
-                id: $scope.id,
-                descricao: $scope.descricao,
-                nivel_privilegio: $scope.nivel_privilegio,
-                ativo: $scope.ativo,
-                funcionalidades: $scope.funcionalidades
-            }
-                
-            if($stateParams.id){
-                var request = perfilService.update(obj);
-                var title = "Editado!";
-            }else{
-                var request = perfilService.insert(obj);
-                var title = "Cadastrado!";
-            }
-            request.then(function(){
-                SweetAlert.swal({
-                   title: title,
-                   type: "success",
-                   showCancelButton: false,
-                   confirmButtonText: "OK",
-                   closeOnConfirm: true},
-                function(isConfirm){ 
-                    if (isConfirm) {
-                        $state.go('app.perfis');
-                    }
-                });
-            }, function(){
-                SweetAlert.swal("ERRO!", "Ocorreu um problema ao cadastrar", "error");
-            });
-        }
-
-        $scope.cancelar = function(){
-            SweetAlert.swal({
-               title: "Deseja descartar todas as alterações?",
-               type: "warning",
-               showCancelButton: true,
-               cancelButtonText: "Não",
-               confirmButtonColor: "#DD6B55",
-               confirmButtonText: "Sim",
-               closeOnConfirm: true}, 
-            function(onConfirm){ 
-                if(onConfirm){
-                    $state.go('app.perfis');
-                }
-            });
-        }
-        $scope.checkModulo = function(modulo){
-            modulo.funcionalidades.forEach(function(obj){
-                obj.checked = modulo.checked;
-            });
-        };
-        $scope.checkFuncionalidade = function(modulo){
-            var count_checked = 0;
-            modulo.funcionalidades.forEach(function(obj){
-                if(obj.checked) count_checked++;
-            });
-
-            modulo.checked = (count_checked == modulo.funcionalidades.length);
-        };
-    }
-})();
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.perfis')
-        .service('perfilService', ['$http','$q', function ($http, $q) {
-
-            this.getModulosFuncionalidades = function(){
-                return $q(function(resolve, reject) {
-                    resolve($http.get('api/modulos_funcionalidades'));
-                });
-            }
-
-            var urlBase = 'api/perfis';
+            var urlBase = 'api/distribuidores';
 
             this.getAll = function () {
                 return $q(function(resolve, reject) {

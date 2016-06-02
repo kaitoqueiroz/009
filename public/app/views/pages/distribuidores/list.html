@@ -1,0 +1,53 @@
+<h3>Pesquisa de Distribuidores 
+<a ng-href="#/app/distribuidores/create" type="button" class="btn btn-labeled btn-success pull-right">
+	<span class="btn-label">
+		<i class="fa fa-plus"></i>
+	</span>
+	Novo Distribuidor
+</a>
+</h3>
+<div class="row" ng-controller="distribuidorController as ctrl" >
+    <div class="panel panel-default">
+       <div class="panel-body">
+            <form class="form-group col-sm-12 no-padding" ng-submit="ctrl.search()">
+                <div class="col-sm-10">
+                    <input type="text" ng-model="ctrl.pesquisa" placeholder="Pesquisar" class="form-control col-sm-5">
+                </div>
+
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                        <span class="btn-label">
+                            <i class="fa fa-search"></i>
+                        </span> Pesquisar
+                    </button>
+                    
+                </div>
+            </form>
+            <div class="form-group col-sm-12">
+                <div class="panel panel-default">
+                    <table ng-table="ctrl.tableParams" class="table">
+                        <thead>
+                            <th style="text-align:left">Id</th>
+                            <th style="text-align:left">Distribuidor</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="distribuidor in $data">
+                                <td>{{distribuidor.id}}</td>
+                                <td>{{distribuidor.descricao}}</td>
+                                <td style="text-align:right">
+                                    <a class="btn btn-primary" ng-href="#/app/distribuidores/edit/{{distribuidor.id}}">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <button class="btn btn-danger" ng-click="ctrl.delete(distribuidor)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+               </div>
+           </div>
+       </div>
+    </div>
+</div>
