@@ -11,6 +11,27 @@ class Distribuidor extends Model implements Transformable
     use TransformableTrait;
 
     protected $table = 'distribuidores';
-    protected $fillable = [];
-
+    protected $fillable = [
+        "id",
+        "nome",
+        "fantasia",
+        "pai",
+        "tipo_pessoa",
+        "cpf_cnpj",
+        "rg",
+        "cep",
+        "municipio",
+        "uf",
+        "endereco",
+        "numero",
+        "complemento",
+        "bairro",
+        "fone",
+        "celular",
+        "email"
+    ];
+    
+    public function setPaiAttribute($value) {
+        $this->attributes['pai'] = $value ?: null;
+    }
 }

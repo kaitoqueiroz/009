@@ -2,10 +2,10 @@
     'use strict';
 
     angular
-        .module('app.distribuidores')
-        .service('distribuidorService', ['$http','$q', function ($http,$q) {
+        .module('app.lancamentos')
+        .service('lancamentoService', ['$http','$q', function ($http,$q) {
 
-            var urlBase = 'api/distribuidores';
+            var urlBase = 'api/lancamentos';
 
             this.getAll = function () {
                 return $q(function(resolve, reject) {

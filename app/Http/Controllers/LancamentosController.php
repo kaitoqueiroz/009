@@ -7,27 +7,27 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
-use App\Http\Requests\DistribuidorCreateRequest;
-use App\Http\Requests\DistribuidorUpdateRequest;
-use App\Repositories\DistribuidorRepository;
-use App\Validators\DistribuidorValidator;
+use App\Http\Requests\LancamentoCreateRequest;
+use App\Http\Requests\LancamentoUpdateRequest;
+use App\Repositories\LancamentoRepository;
+use App\Validators\LancamentoValidator;
 
 
-class DistribuidoresController extends Controller
+class LancamentosController extends Controller
 {
 
     /**
-     * @var DistribuidorRepository
+     * @var LancamentoRepository
      */
     protected $repository;
 
     /**
-     * @var DistribuidorValidator
+     * @var LancamentoValidator
      */
     protected $validator;
 
 
-    public function __construct(DistribuidorRepository $repository, DistribuidorValidator $validator)
+    public function __construct(LancamentoRepository $repository, LancamentoValidator $validator)
     {
         $this->middleware(['auth','cors']);
         $this->repository = $repository;
@@ -44,28 +44,11 @@ class DistribuidoresController extends Controller
     {
 
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $distribuidores = $this->repository->orderBy('id','desc')
-            ->paginate(null,["id",
-                "nome",
-                "fantasia",
-                "pai",
-                "tipo_pessoa",
-                "cpf_cnpj",
-                "rg",
-                "cep",
-                "municipio",
-                "uf",
-                "endereco",
-                "numero",
-                "complemento",
-                "bairro",
-                "fone",
-                "celular",
-                "email"]
-            );
+        $lancamentos = $this->repository->orderBy('id','desc')
+            ->paginate();
 
         return response()->json([
-            'data' => $distribuidores,
+            'data' => $lancamentos,
         ]);
     }
 
@@ -78,26 +61,27 @@ class DistribuidoresController extends Controller
     public function create()
     {
 
-        return view('distribuidores.create');
+        return view('lancamentos.create');
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  DistribuidorCreateRequest $request
+     * @param  LancamentoCreateRequest $request
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(DistribuidorCreateRequest $request)
+    public function store(LancamentoCreateRequest $request)
     {
+
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
 
             $this->repository->create($request->all());
 
-            return response()->json(['message' => 'Distribuidor created.']);
+            return response()->json(['message' => 'Lancamento created.']);
         } catch (ValidatorException $e) {
             return response()->json([
                 'error'   => true,
@@ -116,19 +100,16 @@ class DistribuidoresController extends Controller
      */
     public function show($id)
     {
-        $distribuidor = $this->repository->find($id);
-        if(isset($distribuidor["data"]["pai"])){
-            $pai = $this->repository->find($distribuidor["data"]["pai"]);
-            $distribuidor["data"]["pai"] = $pai["data"];
-        }
+        $lancamento = $this->repository->find($id);
+
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $distribuidor,
+                'data' => $lancamento,
             ]);
         }
 
-        return view('distribuidores.show', compact('distribuidor'));
+        return view('lancamentos.show', compact('lancamento'));
     }
 
 
@@ -142,21 +123,21 @@ class DistribuidoresController extends Controller
     public function edit($id)
     {
 
-        $distribuidor = $this->repository->find($id);
+        $lancamento = $this->repository->find($id);
 
-        return view('distribuidores.edit', compact('distribuidor'));
+        return view('lancamentos.edit', compact('lancamento'));
     }
 
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  DistribuidorUpdateRequest $request
+     * @param  LancamentoUpdateRequest $request
      * @param  string            $id
      *
      * @return Response
      */
-    public function update(DistribuidorUpdateRequest $request, $id)
+    public function update(LancamentoUpdateRequest $request, $id)
     {
 
         try {
@@ -165,7 +146,7 @@ class DistribuidoresController extends Controller
 
             $this->repository->update($request->all(), $id);
 
-            return response()->json(['message' => 'Distribuidor updated.']);
+            return response()->json(['message' => 'Lancamento updated.']);
         } catch (ValidatorException $e) {
             return response()->json([
                 'error'   => true,
@@ -189,11 +170,11 @@ class DistribuidoresController extends Controller
         if (request()->wantsJson()) {
 
             return response()->json([
-                'message' => 'Distribuidor deleted.',
+                'message' => 'Lancamento deleted.',
                 'deleted' => $deleted,
             ]);
         }
 
-        return redirect()->back()->with('message', 'Distribuidor deleted.');
+        return redirect()->back()->with('message', 'Lancamento deleted.');
     }
 }

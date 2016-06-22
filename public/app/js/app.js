@@ -27,7 +27,8 @@
             'app.settings',
             'app.utils',
             'app.pages',
-            'app.distribuidores'
+            'app.distribuidores',
+            'app.lancamentos'
         ]);
 })();
 
@@ -68,7 +69,19 @@
     'use strict';
 
     angular
+        .module('app.loadingbar', []);
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.navsearch', []);
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.pages', []);
 })();
 (function() {
     'use strict';
@@ -90,12 +103,6 @@
     'use strict';
 
     angular
-        .module('app.pages', []);
-})();
-(function() {
-    'use strict';
-
-    angular
         .module('app.settings', []);
 })();
 (function() {
@@ -103,12 +110,6 @@
 
     angular
         .module('app.sidebar', []);
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar', []);
 })();
 (function() {
     'use strict';
@@ -354,13 +355,68 @@
                 'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js',
                 'vendor/angular-bootstrap-colorpicker/css/colorpicker.min.css'
               ]
-            },
+            },{
+              name: 'angularjs-autocomplete',
+              files: [
+                'vendor/angularjs-autocomplete/build/angularjs-autocomplete.min.js'
+              ]
+            },{
+              name: 'angucomplete-alt',
+              files: [
+                'vendor/angucomplete-alt/angucomplete-alt.css',
+                'vendor/angucomplete-alt/angucomplete-alt.js'
+              ]
+            }
           ]
         })
         ;
 
 })();
 
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .config(loadingbarConfig)
+        ;
+    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
+    function loadingbarConfig(cfpLoadingBarProvider){
+      cfpLoadingBarProvider.includeBar = true;
+      cfpLoadingBarProvider.includeSpinner = false;
+      cfpLoadingBarProvider.latencyThreshold = 500;
+      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.loadingbar')
+        .run(loadingbarRun)
+        ;
+    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
+    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
+
+      // Loading bar transition
+      // ----------------------------------- 
+      var thBar;
+      $rootScope.$on('$stateChangeStart', function() {
+          if($('.wrapper > section').length) // check if bar container exists
+            thBar = $timeout(function() {
+              cfpLoadingBar.start();
+            }, 0); // sets a latency Threshold
+      });
+      $rootScope.$on('$stateChangeSuccess', function(event) {
+          event.targetScope.$watch('$viewContentLoaded', function () {
+            $timeout.cancel(thBar);
+            cfpLoadingBar.complete();
+          });
+      });
+
+    }
+
+})();
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key
@@ -467,6 +523,72 @@
             .val('') // Empty input
             ;
         }        
+    }
+})();
+
+/**=========================================================
+ * Module: access-login.js
+ * Demo for login api
+ =========================================================*/
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.pages')
+        .controller('LoginFormController', LoginFormController);
+
+    LoginFormController.$inject = ['$http', '$state'];
+    function LoginFormController($http, $state) {
+        var vm = this;
+
+        activate();
+
+        ////////////////
+
+        function activate() {
+          // bind here all data from the form
+          vm.account = {};
+          // place the message if something goes wrong
+          vm.authMsg = '';
+
+          vm.login = function() {
+            vm.authMsg = '';
+
+            if(vm.loginForm.$valid) {
+              $http
+                .post('api/login', {username: vm.account.username, password: vm.account.password})
+                .then(function(response) {
+                  // assumes if ok, response is an object with some data, if not, a string with error
+                  // customize according to your api
+                  if ( !response.data ) {
+                    vm.authMsg = 'Login incorreto.';
+                  }else{
+                    $state.go('app.singleview');
+                  }
+                }, function(response) {
+                  console.log(response);
+                  if(response.data.error == 401){
+                    vm.authMsg = response.data.message;
+                  }else{
+                    vm.authMsg = 'Erro de conexão com o servidor.';
+                  }
+                });
+            }
+            else {
+              // set as dirty if the user click directly to login so we show the validation messages
+              /*jshint -W106*/
+              vm.loginForm.account_email.$dirty = true;
+              vm.loginForm.account_password.$dirty = true;
+            }
+          };
+
+          vm.logout = function() {
+            $http.get('sessions/logout').then(function(response) {
+              $state.go('login');
+            });
+          }
+        }
     }
 })();
 
@@ -683,7 +805,8 @@
                 url: '/app',
                 abstract: true,
                 templateUrl: helper.basepath('app.html'),
-                resolve: helper.resolveFor('modernizr', 'icons', 'xeditable', 'ngTable', 'sweetalert','ngTagsInput','colorpicker')
+                resolve: helper.resolveFor('modernizr', 'icons', 'xeditable', 'ngTable', 
+                    'sweetalert','ngTagsInput','colorpicker','angucomplete-alt')
             })
             .state('app.singleview', {
                 url: '/singleview',
@@ -742,72 +865,6 @@
           return sdo;
         }]);
 })();
-/**=========================================================
- * Module: access-login.js
- * Demo for login api
- =========================================================*/
-
-(function() {
-    'use strict';
-
-    angular
-        .module('app.pages')
-        .controller('LoginFormController', LoginFormController);
-
-    LoginFormController.$inject = ['$http', '$state'];
-    function LoginFormController($http, $state) {
-        var vm = this;
-
-        activate();
-
-        ////////////////
-
-        function activate() {
-          // bind here all data from the form
-          vm.account = {};
-          // place the message if something goes wrong
-          vm.authMsg = '';
-
-          vm.login = function() {
-            vm.authMsg = '';
-
-            if(vm.loginForm.$valid) {
-              $http
-                .post('api/login', {username: vm.account.username, password: vm.account.password})
-                .then(function(response) {
-                  // assumes if ok, response is an object with some data, if not, a string with error
-                  // customize according to your api
-                  if ( !response.data ) {
-                    vm.authMsg = 'Login incorreto.';
-                  }else{
-                    $state.go('app.singleview');
-                  }
-                }, function(response) {
-                  console.log(response);
-                  if(response.data.error == 401){
-                    vm.authMsg = response.data.message;
-                  }else{
-                    vm.authMsg = 'Erro de conexão com o servidor.';
-                  }
-                });
-            }
-            else {
-              // set as dirty if the user click directly to login so we show the validation messages
-              /*jshint -W106*/
-              vm.loginForm.account_email.$dirty = true;
-              vm.loginForm.account_password.$dirty = true;
-            }
-          };
-
-          vm.logout = function() {
-            $http.get('sessions/logout').then(function(response) {
-              $state.go('login');
-            });
-          }
-        }
-    }
-})();
-
 (function() {
     'use strict';
 
@@ -1221,50 +1278,6 @@
     }
 })();
 
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .config(loadingbarConfig)
-        ;
-    loadingbarConfig.$inject = ['cfpLoadingBarProvider'];
-    function loadingbarConfig(cfpLoadingBarProvider){
-      cfpLoadingBarProvider.includeBar = true;
-      cfpLoadingBarProvider.includeSpinner = false;
-      cfpLoadingBarProvider.latencyThreshold = 500;
-      cfpLoadingBarProvider.parentSelector = '.wrapper > section';
-    }
-})();
-(function() {
-    'use strict';
-
-    angular
-        .module('app.loadingbar')
-        .run(loadingbarRun)
-        ;
-    loadingbarRun.$inject = ['$rootScope', '$timeout', 'cfpLoadingBar'];
-    function loadingbarRun($rootScope, $timeout, cfpLoadingBar){
-
-      // Loading bar transition
-      // ----------------------------------- 
-      var thBar;
-      $rootScope.$on('$stateChangeStart', function() {
-          if($('.wrapper > section').length) // check if bar container exists
-            thBar = $timeout(function() {
-              cfpLoadingBar.start();
-            }, 0); // sets a latency Threshold
-      });
-      $rootScope.$on('$stateChangeSuccess', function(event) {
-          event.targetScope.$watch('$viewContentLoaded', function () {
-            $timeout.cancel(thBar);
-            cfpLoadingBar.complete();
-          });
-      });
-
-    }
-
-})();
 (function() {
     'use strict';
 
@@ -1823,6 +1836,56 @@
             })
     }
 })();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lancamentos', [
+            // request the the entire framework
+            'angle',
+            // or just modules
+            'app.routes',
+            'app.core',
+            'app.sidebar'
+            /*...*/
+        ])
+        .config(routesConfig);
+
+        routesConfig.$inject = ['$stateProvider', 'RouteHelpersProvider'];
+
+        function routesConfig($stateProvider, helper){
+            $stateProvider
+            .state('app.lancamentos', {
+                url: '/lancamentos/list',
+                templateUrl: helper.basepath('pages/lancamentos/list.html'),
+                resolve: {
+                    auth: ["auth", function(auth) {
+                        return auth.isAuth();
+                    }]
+                }
+            })
+            .state('app.lancamentos_create', {
+                url: '/lancamentos/create',
+                controller: 'lancamentoFormController',
+                templateUrl: helper.basepath('pages/lancamentos/form.html'),
+                resolve: {
+                    auth: ["auth", function(auth) {
+                        return auth.isAuth();
+                    }]
+                }
+            })
+            .state('app.lancamentos_edit', {
+                url: '/lancamentos/edit/:id',
+                controller: 'lancamentoFormController',
+                templateUrl: helper.basepath('pages/lancamentos/form.html'),
+                resolve: {
+                    auth: ["auth", function(auth) {
+                        return auth.isAuth();
+                    }]
+                }
+            })
+    }
+})();
 
 // To run this code, edit file index.html or index.jade and change
 // html data-ng-app attribute from angle to myAppName
@@ -1957,21 +2020,30 @@
     Controller.$inject = ['$scope', '$state', '$stateParams', 'distribuidorService','SweetAlert'];
     function Controller($scope, $state, $stateParams, distribuidorService, SweetAlert) {
         if (!$stateParams.id) {
-            $scope.entity = [];
+            $scope.entity = null;
         }else{
             distribuidorService.get($stateParams.id).then(function(result){
-                $scope.entity = result.data.data;
+                $scope.entity = result.data.data.data;
+                console.log($scope.entity);
             }),
             function(){
                 SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
             };
         }
-
+        $scope.distribuidores = [];
+        distribuidorService.getAll()
+        .then(function (result) {
+            $scope.distribuidores = result.data.data.data;
+            console.log($scope.distribuidores);
+        });
+        
+        $scope.selected = undefined;
+        
         $scope.submit = function(){
-            
-            console.log($scope.entity);
-            return;
-            
+            console.log($scope.entity.pai);
+            if($scope.entity.pai){
+                $scope.entity.pai = $scope.entity.pai.originalObject.id;
+            }
             if($stateParams.id){
                 var request = distribuidorService.update($scope.entity);
                 var title = "Editado!";
@@ -2013,7 +2085,6 @@
         }
     }
 })();
-
 (function() {
     'use strict';
 
@@ -2033,7 +2104,237 @@
 
                 return $q(function(resolve, reject) {
                     if(search){
-                        resolve($http.get(urlBase + '?page=' + page +'&search=descricao:' + search));
+                        resolve($http.get(urlBase + '?page=' + page +'&search=nome:' + search));
+                    }
+                    resolve($http.get(urlBase + '?page=' + page));
+                });
+            };
+
+            this.search = function (query) {
+                return $q(function(resolve, reject) {
+                    resolve($http.get(urlBase + '?search=' + query));
+                });
+            };
+
+            this.get = function (id) {
+                return $q(function(resolve, reject) {
+                    resolve($http.get(urlBase + '/' + id));
+                });
+            };
+
+            this.insert = function (cust) {
+                return $q(function(resolve, reject) {
+                    resolve($http.post(urlBase, cust));
+                });
+            };
+
+            this.update = function (cust) {
+                return $q(function(resolve, reject) {
+                    resolve($http.put(urlBase + '/' + cust.id, cust));
+                });
+            };
+
+            this.delete = function (id) {
+                return $q(function(resolve, reject) {
+                    resolve($http.delete(urlBase + '/' + id));
+                });
+            };
+        }]);
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lancamentos')
+        .controller('lancamentoController', Controller);
+
+    Controller.$inject = ['$filter', 'ngTableParams', 'lancamentoService', 'SweetAlert'];
+    function Controller($filter, ngTableParams, lancamentoService, SweetAlert) {
+        var vm = this;
+        var sweetAlertConfig = {
+               //text: "Your will not be able to recover this imaginary file!",
+               type: "warning",
+               showCancelButton: true,
+               confirmButtonColor: "#DD6B55",
+               confirmButtonText: "Sim",
+               cancelButtonText: "Não",
+               closeOnConfirm: false,
+               closeOnCancel: false };
+        vm.pesquisa = '';
+
+        vm.tableParams = new ngTableParams([
+                {
+                    page: 1, 
+                    count: 15
+                }],
+            {
+                counts: [],
+                getData: function ($defer, params) {
+                    var filter = params.filter();
+                    var sorting = params.sorting();
+                    var count = params.count();
+                    var page = params.page();
+
+                    lancamentoService.paginate(page,vm.pesquisa)
+                        .then(function (result) {
+                            vm.tableParams.total(result.data.data.total/result.data.data.per_page);
+                            $defer.resolve(result.data.data.data);
+                        });
+                }
+            }
+        );
+
+        vm.search = function(){
+            vm.tableParams.page(1);
+            vm.tableParams.reload();
+        }
+
+        vm.delete = function(obj){
+            sweetAlertConfig.title = "Tem certeja que deseja excluir este lancamento?";
+
+            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
+                if (isConfirm) {
+                    lancamentoService.delete(obj.id).then(function(){
+                        vm.tableParams.reload();
+                        SweetAlert.swal("excluído!", "Lancamento excluído com sucesso.", "success");
+                    }, function(){
+                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao excluir", "error");
+                    });
+                } else {
+                    SweetAlert.swal("Cancelado", "O lancamento não foi excluído", "error");
+                }
+            });
+        }
+        vm.updateAtivo = function(obj){
+            var acao = '';
+            if(!obj.ativo){
+                acao = 'des';
+            }
+            sweetAlertConfig.title = "Tem certeja que deseja "+acao+"ativar este lancamento?";
+
+            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
+                if (isConfirm) {
+                    lancamentoService.update(obj).then(function(){
+                        SweetAlert.swal(""+acao+"ativado!", "Lancamento "+acao+"ativado com sucesso.", "success");
+                    }, function(){
+                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao atualizar", "error");
+                        obj.ativo = !obj.ativo;
+                    });
+                } else {
+                    SweetAlert.swal("Cancelado", "O lancamento não foi "+acao+"ativado", "error");
+                    obj.ativo = !obj.ativo;
+                }
+            });
+        }
+    }
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lancamentos')
+        .controller('lancamentoFormController', Controller);
+
+    Controller.$inject = ['$scope', '$state', '$stateParams', 'lancamentoService','SweetAlert'];
+    function Controller($scope, $state, $stateParams, lancamentoService, SweetAlert) {
+        if (!$stateParams.id) {
+            $scope.entity = null;
+        }else{
+            lancamentoService.get($stateParams.id).then(function(result){
+                $scope.entity = result.data.data.data;
+                console.log($scope.entity);
+            }),
+            function(){
+                SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
+            };
+        }
+        $scope.lancamentos = [];
+        lancamentoService.getAll()
+        .then(function (result) {
+            $scope.lancamentos = result.data.data.data;
+            console.log($scope.lancamentos);
+        });
+        
+        $scope.selected = undefined;
+        
+        $scope.submit = function(){
+            console.log($scope.entity.pai);
+            if($scope.entity.pai){
+                $scope.entity.pai = $scope.entity.pai.originalObject.id;
+            }
+            if($stateParams.id){
+                var request = lancamentoService.update($scope.entity);
+                var title = "Editado!";
+            }else{
+                var request = lancamentoService.insert($scope.entity);
+                var title = "Cadastrado!";
+            }
+            request.then(function(){
+                SweetAlert.swal({
+                   title: title,
+                   type: "success",
+                   showCancelButton: false,
+                   confirmButtonText: "OK",
+                   closeOnConfirm: true},
+                function(isConfirm){ 
+                    if (isConfirm) {
+                        $state.go('app.lancamentos');
+                    }
+                });
+            }, function(){
+                SweetAlert.swal("ERRO!", "Ocorreu um problema ao cadastrar", "error");
+            });
+        }
+
+        $scope.cancelar = function(){
+            SweetAlert.swal({
+               title: "Deseja descartar todas as alterações?",
+               type: "warning",
+               showCancelButton: true,
+               cancelButtonText: "Não",
+               confirmButtonColor: "#DD6B55",
+               confirmButtonText: "Sim",
+               closeOnConfirm: true}, 
+            function(onConfirm){ 
+                if(onConfirm){
+                    $state.go('app.lancamentos');
+                }
+            });
+        }
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lancamentos')
+        .service('lancamentoService', ['$http','$q', function ($http,$q) {
+
+            var urlBase = 'api/lancamentos';
+
+            this.getAll = function () {
+                return $q(function(resolve, reject) {
+                    resolve($http.get(urlBase));
+                });
+            };
+            
+            this.paginate = function (page,search) {
+
+                return $q(function(resolve, reject) {
+                    if(search){
+                        resolve($http.get(urlBase + '?page=' + page +'&search=nome:' + search));
                     }
                     resolve($http.get(urlBase + '?page=' + page));
                 });

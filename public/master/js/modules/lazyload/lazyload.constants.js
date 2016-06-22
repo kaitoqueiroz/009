@@ -44,7 +44,18 @@
                 'vendor/angular-bootstrap-colorpicker/js/bootstrap-colorpicker-module.min.js',
                 'vendor/angular-bootstrap-colorpicker/css/colorpicker.min.css'
               ]
-            },
+            },{
+              name: 'angularjs-autocomplete',
+              files: [
+                'vendor/angularjs-autocomplete/build/angularjs-autocomplete.min.js'
+              ]
+            },{
+              name: 'angucomplete-alt',
+              files: [
+                'vendor/angucomplete-alt/angucomplete-alt.css',
+                'vendor/angucomplete-alt/angucomplete-alt.js'
+              ]
+            }
           ]
         })
         ;

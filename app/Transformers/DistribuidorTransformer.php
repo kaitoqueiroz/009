@@ -22,11 +22,22 @@ class DistribuidorTransformer extends TransformerAbstract
     {
         return [
             'id'         => (int) $model->id,
-
-            /* place your other model properties here */
-
-            'created_at' => $model->created_at,
-            'updated_at' => $model->updated_at
+            'nome'       => $model->nome,
+            'fantasia'   => $model->fantasia,
+            'pai'        => (int) $model->pai,
+            'tipo_pessoa'=> $model->tipo_pessoa,
+            'cpf_cnpj'   => $model->cpf_cnpj,
+            'rg'         => $model->rg,
+            'cep'         => $model->cep,
+            'municipio'         => $model->municipio,
+            'uf'         => $model->uf,
+            'endereco'         => $model->endereco,
+            'numero'         => $model->numero,
+            'complemento'         => $model->complemento,
+            'bairro'         => $model->bairro,
+            'fone'         => $model->fone,
+            'celular'         => $model->celular,
+            'email'         => $model->email
         ];
     }
 }

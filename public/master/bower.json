@@ -58,6 +58,9 @@
     "angular-bootstrap-colorpicker": "^3.0.25",
     "angular-xeditable": "^0.1.12",
     "ng-table": "^0.8.3",
-    "ngSweetAlert": "^1.1.0"
+    "ngSweetAlert": "^1.1.0",
+    "allmighty-autocomplete": "*",
+    "angularjs-autocomplete": "^0.4.8",
+    "angucomplete-alt": "^2.4.1"
   }
 }

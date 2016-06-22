@@ -15,6 +15,9 @@
   "bower_components/ng-tags-input/ng-tags-input.min.js",
   "bower_components/ng-tags-input/ng-tags-input.min.css",
   "bower_components/ng-tags-input/ng-tags-input.bootstrap.min.css",
+  "bower_components/ng-tags-input/ng-tags-input.bootstrap.min.css",
+  "bower_components/angucomplete-alt/angucomplete-alt.css",
+  "bower_components/angucomplete-alt/angucomplete-alt.js",
   "bower_components/simple-line-icons/fonts/*",
   "bower_components/bootstrap/fonts/*"
 ]

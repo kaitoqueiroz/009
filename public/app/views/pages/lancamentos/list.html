@@ -1,12 +1,12 @@
-<h3>Pesquisa de Distribuidores 
-<a ng-href="#/app/distribuidores/create" type="button" class="btn btn-labeled btn-success pull-right">
+<h3>Pesquisa de Lancamentos 
+<a ng-href="#/app/lancamentos/create" type="button" class="btn btn-labeled btn-success pull-right">
 	<span class="btn-label">
 		<i class="fa fa-plus"></i>
 	</span>
-	Novo Distribuidor
+	Novo Lancamento
 </a>
 </h3>
-<div class="row" ng-controller="distribuidorController as ctrl" >
+<div class="row" ng-controller="lancamentoController as ctrl" >
     <div class="panel panel-default">
        <div class="panel-body">
             <form class="form-group col-sm-12 no-padding" ng-submit="ctrl.search()">
@@ -34,29 +34,29 @@
                             <th></th>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="distribuidor in $data">
-                                <td>{{distribuidor.nome}}</td>
-                                <td>{{distribuidor.cpf_cnpj}}</td>
-                                <td>{{distribuidor.municipio}}</td>
+                            <tr ng-repeat="lancamento in $data">
+                                <td>{{lancamento.nome}}</td>
+                                <td>{{lancamento.cpf_cnpj}}</td>
+                                <td>{{lancamento.municipio}}</td>
                                 <td>
-                                    <div ng-show="distribuidor.fone">
+                                    <div ng-show="lancamento.fone">
                                         <i style="width: 30px" class="fa fa-phone text-center"></i>
-                                        {{distribuidor.fone || "-"}}<br>
+                                        {{lancamento.fone || "-"}}<br>
                                     </div>
-                                    <div ng-show="distribuidor.celular">
+                                    <div ng-show="lancamento.celular">
                                         <i style="width: 30px" class="fa fa-mobile text-center"></i>
-                                        {{distribuidor.celular || "-"}}<br>
+                                        {{lancamento.celular || "-"}}<br>
                                     </div>
-                                    <div ng-show="distribuidor.email">
+                                    <div ng-show="lancamento.email">
                                         <i style="width: 30px" class="fa fa-envelope-o text-center"></i>
-                                        {{distribuidor.email || "-"}}<br>
+                                        {{lancamento.email || "-"}}<br>
                                     </div>
                                 </td>
                                 <td style="text-align:right">
-                                    <a class="btn btn-primary" ng-href="#/app/distribuidores/edit/{{distribuidor.id}}">
+                                    <a class="btn btn-primary" ng-href="#/app/lancamentos/edit/{{lancamento.id}}">
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <button class="btn btn-danger" ng-click="ctrl.delete(distribuidor)">
+                                    <button class="btn btn-danger" ng-click="ctrl.delete(lancamento)">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>

@@ -34,7 +34,8 @@
                 url: '/app',
                 abstract: true,
                 templateUrl: helper.basepath('app.html'),
-                resolve: helper.resolveFor('modernizr', 'icons', 'xeditable', 'ngTable', 'sweetalert','ngTagsInput','colorpicker')
+                resolve: helper.resolveFor('modernizr', 'icons', 'xeditable', 'ngTable', 
+                    'sweetalert','ngTagsInput','colorpicker','angucomplete-alt')
             })
             .state('app.singleview', {
                 url: '/singleview',

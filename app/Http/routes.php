@@ -21,3 +21,4 @@ Route::get('sessions', ['middleware' => ['auth','cors'], function()
 }]);
 
 Route::resource('api/distribuidores', 'DistribuidoresController');
+Route::resource('api/lancamentos', 'LancamentosController');

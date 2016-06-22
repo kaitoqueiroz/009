@@ -15,6 +15,12 @@ use App\Validators\DistribuidorValidator;
 class DistribuidorRepositoryEloquent extends BaseRepository implements DistribuidorRepository
 {
     /**
+     * @var array
+     */
+    protected $fieldSearchable = [
+        'nome'=>'like'
+    ];
+    /**
      * Specify Model class name
      *
      * @return string
@@ -33,6 +39,16 @@ class DistribuidorRepositoryEloquent extends BaseRepository implements Distribui
     {
 
         return DistribuidorValidator::class;
+    }
+
+    /**
+    * Specify Presenter class name
+    *
+    * @return mixed
+    */
+    public function presenter()
+    {
+        return "App\\Presenters\\DistribuidorPresenter";
     }
 
 
