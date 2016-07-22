@@ -22,7 +22,12 @@
                cancelButtonText: "Não",
                closeOnConfirm: false,
                closeOnCancel: false };
-        vm.pesquisa = '';
+               
+        vm.entity = {};
+        vm.entity.nome = '';
+        vm.entity.tipo_pessoa = '';
+        vm.entity.cpf_cnpj = '';
+        vm.entity.uf = '';
 
         vm.tableParams = new ngTableParams([
                 {
@@ -36,8 +41,15 @@
                     var sorting = params.sorting();
                     var count = params.count();
                     var page = params.page();
+                    
+                    var arr = [];
+                    angular.forEach(vm.entity,function(obj,index){
+                        if(obj){
+                            arr.push(index+":"+obj);
+                        }
+                    });
 
-                    distribuidorService.paginate(page,vm.pesquisa)
+                    distribuidorService.paginate(page,arr.join(";"))
                         .then(function (result) {
                             vm.tableParams.total(result.data.data.total/result.data.data.per_page);
                             $defer.resolve(result.data.data.data);

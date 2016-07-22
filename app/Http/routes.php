@@ -20,5 +20,9 @@ Route::get('sessions', ['middleware' => ['auth','cors'], function()
     return \Response::json(['message'=>'success']);
 }]);
 
+Route::put('api/config/mudar_senha/{id}', ['middleware' => ['auth','cors'], 'uses' => 'ConfigController@mudar_senha']);
 Route::resource('api/distribuidores', 'DistribuidoresController');
 Route::resource('api/lancamentos', 'LancamentosController');
+Route::resource('api/comissoes', 'ComissoesController');
+Route::resource('api/config', 'ConfigController');
+Route::get('api/pontos', ['middleware' => ['cors'], 'uses' => 'ComissoesController@pontos']);

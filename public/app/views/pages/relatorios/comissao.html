@@ -1,12 +1,6 @@
-<h3>Pesquisa de Lançamentos 
-<a ng-href="#/app/lancamentos/create" type="button" class="btn btn-labeled btn-success pull-right">
-	<span class="btn-label">
-		<i class="fa fa-plus"></i>
-	</span>
-	Novo Lançamento
-</a>
-</h3>
-<div class="row" ng-controller="lancamentoController as ctrl" >
+<h3>Relatório de Comissões</h3>
+
+<div class="row" ng-controller="relatorioComissaoController as ctrl" >
     <div class="panel panel-default">
        <div class="panel-body">
             <form class="form-group col-sm-12 no-padding form-horizontal" ng-submit="ctrl.search()">
@@ -30,40 +24,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-12 no-padding">Tipo de Lançamento</label>
-                        <select class="form-control col-sm-12" ng-model="ctrl.entity.tipo">
-                            <option value=""></option>
-                            <option value="credito">Crédito</option>
-                            <option value="credito_aberto">Crédito Aberto</option>
-                            <option value="debito">Débito</option>
-                            <option value="pagamento">Pagamento</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="col-sm-12">Período</label>
-                        <div class="col-sm-6">
-                            <input id="de"
-                                type="{{inputType_de || 'text'}}" 
-                                ng-focus="inputType_de = 'date'" 
-                                ng-blur="inputType_de = (ctrl.entity.de)?'date':'text'" 
-                                placeholder="De:" 
-                                ng-model="ctrl.entity.de" 
-                                class="form-control col-sm-5">
-                        </div>
-                        <div class="col-sm-6">
-                            <input id="ate"
-                                type="{{inputType_ate || 'text'}}" 
-                                ng-focus="inputType_ate = 'date'" 
-                                ng-blur="inputType_ate = (ctrl.entity.de)?'date':'text'" 
-                                placeholder="Até:" ng-model="ctrl.entity.ate" 
-                                class="form-control col-sm-5">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-12">Estado</label>
-                        <div class="col-sm-12">
+                        <label class="col-sm-12 no-padding">Estado</label>
+                        <div class="col-sm-12 no-padding">
                             <select class="form-control" ng-model="ctrl.entity.uf">
                                 <option value=""></option>
                                 <option value="AC">Acre</option>
@@ -97,6 +59,28 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-12">Período</label>
+                        <div class="col-sm-6">
+                            <input id="de"
+                                type="{{inputType_de || 'text'}}" 
+                                ng-focus="inputType_de = 'date'" 
+                                ng-blur="inputType_de = (ctrl.entity.de)?'date':'text'" 
+                                placeholder="De:" 
+                                ng-model="ctrl.entity.de" 
+                                class="form-control col-sm-5">
+                        </div>
+                        <div class="col-sm-6">
+                            <input id="ate"
+                                type="{{inputType_ate || 'text'}}" 
+                                ng-focus="inputType_ate = 'date'" 
+                                ng-blur="inputType_ate = (ctrl.entity.de)?'date':'text'" 
+                                placeholder="Até:" ng-model="ctrl.entity.ate" 
+                                class="form-control col-sm-5">
+                        </div>
+                    </div>
+                </div>
                 <div class="col-sm-12 center-block">
                     <button type="submit" class="btn btn-labeled btn-primary center-block">
                         <span class="btn-label">
@@ -110,44 +94,32 @@
                     <table ng-table="ctrl.tableParams" class="table">
                         <thead>
                             <th style="text-align:left">Distribuidor</th>
-                            <th style="text-align:left">Pai</th>
                             <th style="text-align:left">Data</th>
                             <th style="text-align:left">Estado</th>
-                            <th style="text-align:left">Tipo de Lançamento</th>
-                            <th style="text-align:left">Saldo</th>
-                            <th></th>
+                            <th style="text-align:left">Comissão</th>
+                            <th style="text-align:left">Origem</th>
+                            <th style="text-align:left">Níveis</th>
                         </thead>
                         <tbody>
                             <tr ng-repeat="lancamento in $data">
                                 <td>{{lancamento.distribuidor.nome}}</td>
-                                <td>{{lancamento.distribuidor.pai.nome}}</td>
                                 <td>{{lancamento.data | date:'dd/MM/yyyy'}}</td>
                                 <td>{{lancamento.distribuidor.uf}}</td>
-                                <td>{{
-                                    (lancamento.tipo == "credito")?"Crédito":
-                                    (lancamento.tipo == "credito_aberto")?"Crédito Aberto":
-                                    (lancamento.tipo == "debito")?"Débito":
-                                    (lancamento.tipo == "pagamento")?"Pagamento":""
-                                }}</td>
                                 <td style="color: {{
                                     (lancamento.tipo == 'credito')?'#27c24c':
-                                    (lancamento.tipo == 'credito_aberto')?'#f05050':
+                                    (lancamento.tipo == 'credito_aberto')?'#27c24c':
                                     (lancamento.tipo == 'debito')?'#f05050':
                                     (lancamento.tipo == 'pagamento')?'#f05050':''
                                 }}">{{lancamento.valor | currency:"R$ "}}</td>
-                                
-                                <td style="text-align:right">
-                                    <a class="btn btn-primary" ng-href="#/app/lancamentos/edit/{{lancamento.id}}">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <button class="btn btn-danger" ng-click="ctrl.delete(lancamento)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
+                                <td>{{lancamento.origem.nome}}</td>
+                                <td>{{
+                                    (lancamento.nivel == 1)?"Filho":
+                                    (lancamento.nivel == 2)?"Neto":"Bisneto"
+                                }}</td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
+               </div>
                
                 <div class="panel panel-default">
                    <div class="panel-body">
@@ -160,7 +132,6 @@
                            
                        </div>
                    </div>
-               </div>
            </div>
        </div>
     </div>

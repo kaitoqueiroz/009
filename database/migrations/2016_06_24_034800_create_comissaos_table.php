@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLancamentosTable extends Migration
+class CreateComissaosTable extends Migration
 {
 
 	/**
@@ -13,16 +13,18 @@ class CreateLancamentosTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('lancamentos', function(Blueprint $table) {
+		Schema::create('comissoes', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('tipo');
             $table->float('valor');
-            $table->text('observacao');
+            $table->integer('nivel');
             $table->date('data');
             $table->integer('pontos');
             
-            $table->integer('distribuidor_id')->unsigned();
-            $table->foreign('distribuidor_id')->references('id')->on('distribuidores');
+            $table->integer('origem')->unsigned();
+            $table->foreign('origem')->references('id')->on('distribuidores');
+            
+            $table->integer('destino')->unsigned();
+            $table->foreign('destino')->references('id')->on('distribuidores');
 
             $table->timestamps();
 		});
@@ -35,7 +37,7 @@ class CreateLancamentosTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('lancamentos');
+		Schema::drop('comissaos');
 	}
 
 }

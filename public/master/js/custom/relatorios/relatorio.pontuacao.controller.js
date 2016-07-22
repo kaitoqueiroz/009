@@ -8,7 +8,7 @@
 
     angular
         .module('app.lancamentos')
-        .controller('lancamentoController', Controller);
+        .controller('relatorioPontuacaoController', Controller);
 
     Controller.$inject = ['$scope', '$filter', 'ngTableParams', 'lancamentoService', 'distribuidorService', 'SweetAlert'];
     function Controller($scope, $filter, ngTableParams, lancamentoService, distribuidorService, SweetAlert) {
@@ -21,7 +21,6 @@
             .then(function (result) {
                 $scope.distribuidores = result.data.data.data;
             });
-            
         var sweetAlertConfig = {
                //text: "Your will not be able to recover this imaginary file!",
                type: "warning",
@@ -73,27 +72,6 @@
         vm.search = function(){
             vm.tableParams.page(1);
             vm.tableParams.reload();
-        }
-
-        vm.distribuidorChange = function(){
-            console.log(vm.entity.distribuidor);
-        }
-
-        vm.delete = function(obj){
-            sweetAlertConfig.title = "Tem certeja que deseja excluir este lancamento?";
-
-            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
-                if (isConfirm) {
-                    lancamentoService.delete(obj.id).then(function(){
-                        vm.tableParams.reload();
-                        SweetAlert.swal("excluído!", "Lancamento excluído com sucesso.", "success");
-                    }, function(){
-                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao excluir", "error");
-                    });
-                } else {
-                    SweetAlert.swal("Cancelado", "O lancamento não foi excluído", "error");
-                }
-            });
         }
     }
 })();

@@ -117,18 +117,14 @@ class DistribuidoresController extends Controller
     public function show($id)
     {
         $distribuidor = $this->repository->find($id);
-        if(isset($distribuidor["data"]["pai"])){
+        if($distribuidor["data"]["pai"]){
             $pai = $this->repository->find($distribuidor["data"]["pai"]);
             $distribuidor["data"]["pai"] = $pai["data"];
         }
-        if (request()->wantsJson()) {
 
-            return response()->json([
-                'data' => $distribuidor,
-            ]);
-        }
-
-        return view('distribuidores.show', compact('distribuidor'));
+        return response()->json([
+            'data' => $distribuidor,
+        ]);
     }
 
 

@@ -2,10 +2,10 @@
     'use strict';
 
     angular
-        .module('app.distribuidores')
-        .service('distribuidorService', ['$http','$q', function ($http,$q) {
+        .module('app.configs')
+        .service('configService', ['$http','$q', function ($http,$q) {
 
-            var urlBase = 'api/distribuidores';
+            var urlBase = 'api/config';
 
             this.getAll = function () {
                 return $q(function(resolve, reject) {
@@ -44,6 +44,12 @@
             this.update = function (cust) {
                 return $q(function(resolve, reject) {
                     resolve($http.put(urlBase + '/' + cust.id, cust));
+                });
+            };
+
+            this.mudarSenha = function (cust) {
+                return $q(function(resolve, reject) {
+                    resolve($http.put(urlBase + '/mudar_senha/' + cust.id, cust));
                 });
             };
 

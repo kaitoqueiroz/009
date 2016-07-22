@@ -10,32 +10,34 @@
         .module('app.lancamentos')
         .controller('lancamentoFormController', Controller);
 
-    Controller.$inject = ['$scope', '$state', '$stateParams', 'lancamentoService','SweetAlert'];
-    function Controller($scope, $state, $stateParams, lancamentoService, SweetAlert) {
+    Controller.$inject = ['$scope', '$state', '$stateParams', 'distribuidorService','lancamentoService','SweetAlert'];
+    function Controller($scope, $state, $stateParams, distribuidorService, lancamentoService, SweetAlert) {
         if (!$stateParams.id) {
-            $scope.entity = null;
+            $scope.entity = {};
+            $scope.entity.distribuidor = {};
         }else{
             lancamentoService.get($stateParams.id).then(function(result){
-                $scope.entity = result.data.data.data;
-                console.log($scope.entity);
+                $scope.entity = result.data.data;
+                $scope.entity.data = new Date($scope.entity.data.replace("-","/"));
+                distribuidorService.get($scope.entity.distribuidor_id).then(function(res){
+                    $scope.entity.distribuidor = res.data.data.data;
+                });
             }),
             function(){
                 SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
             };
         }
         $scope.lancamentos = [];
-        lancamentoService.getAll()
+        distribuidorService.getAll()
         .then(function (result) {
-            $scope.lancamentos = result.data.data.data;
-            console.log($scope.lancamentos);
+            $scope.distribuidores = result.data.data.data;
         });
         
         $scope.selected = undefined;
         
         $scope.submit = function(){
-            console.log($scope.entity.pai);
-            if($scope.entity.pai){
-                $scope.entity.pai = $scope.entity.pai.originalObject.id;
+            if($scope.entity.distribuidor){
+                $scope.entity.distribuidor_id = $scope.entity.distribuidor.originalObject.id;
             }
             if($stateParams.id){
                 var request = lancamentoService.update($scope.entity);

@@ -28,7 +28,9 @@
             'app.utils',
             'app.pages',
             'app.distribuidores',
-            'app.lancamentos'
+            'app.lancamentos',
+            'app.relatorios',
+            'app.configs'
         ]);
 })();
 

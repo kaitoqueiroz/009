@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Lancamento;
+use App\Distribuidor;
 use App\Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -40,15 +42,57 @@ class LancamentosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $lancamentos = $this->repository->orderBy('id','desc')
-            ->paginate();
-
+        $filtros = array();
+        foreach(explode(";", $request->input('search')) as $key=>$val){
+            if($val){
+                $arr = explode(":", $val);
+                $filtros[$arr[0]] = $arr[1];
+            }
+        }
+        $lancamentos = $this->repository->orderBy('data','desc');
+        $lancamentos = $lancamentos->paginate();
+        foreach($lancamentos as $k=>$value){
+            $value->distribuidor = Distribuidor::find($value->distribuidor_id);
+            $value->distribuidor->pai = Distribuidor::find($value->distribuidor->pai);
+            
+            if(isset($filtros["de"]) || isset($filtros["ate"])){
+                $data = strtotime($value->data);
+                if(isset($filtros["de"])){
+                    $de = strtotime($filtros["de"]);
+                }else{
+                    $de = strtotime(date("Y-m-d"));
+                }
+                if(isset($filtros["ate"])){
+                    $ate = strtotime($filtros["ate"]);
+                }else{
+                    $ate = strtotime(date("Y-m-d"));
+                }
+                if(!($data > $de && $data < $ate)) {
+                    unset($lancamentos[$k]);
+                }
+                
+            }elseif(isset($filtros["uf"])){
+                if(!($value->distribuidor->uf == $filtros["uf"])){
+                    unset($lancamentos[$k]);
+                }
+            }
+        }
+        $saldo_total = 0;
+        foreach($lancamentos as $i=>$lancamento){
+            if($lancamento["tipo"] == "credito"){
+                $saldo_total+=$lancamento["valor"];
+            }else{
+                $saldo_total-=$lancamento["valor"];
+            }
+        }
+        $lancamentos->saldo_total = $saldo_total;
+        //dd($lancamentos);
         return response()->json([
             'data' => $lancamentos,
+            'saldo_total' => $saldo_total
         ]);
     }
 
@@ -78,8 +122,52 @@ class LancamentosController extends Controller
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $this->repository->create($request->all());
+            
+            $dados = $request->all();
+            $config = \App\Config::find(1);
+            if($dados["tipo"] == 'debito'){
+                $dados["pontos"] = $dados["valor"]/($config->valor_ponto);
+            }
+            
+            $lancamento = $this->repository->create($request->all());
+            
+            if($dados["tipo"] == 'debito'){
+                $distribuidor = \App\Distribuidor::find($lancamento->distribuidor_id);
+                if($distribuidor->pai){
+                    $nivel_1 = \App\Distribuidor::find($distribuidor->pai);
+                    $comissao = new \App\Comissao();
+                    $comissao->nivel = 1;
+                    $comissao->data = $lancamento->data;
+                    $comissao->origem = $lancamento->distribuidor_id;
+                    $comissao->destino = $distribuidor->pai;
+                    $comissao->valor = ($lancamento->valor/100) * $config->comissao_filho;
+                    $comissao->pontos = $lancamento->valor/($config->valor_ponto*2);
+                    $comissao->save();
+                    if($nivel_1->pai){
+                        $nivel_2 = \App\Distribuidor::find($nivel_1->pai);
+                        $comissao = new \App\Comissao();
+                        $comissao->nivel = 2;
+                        $comissao->data = $lancamento->data;
+                        $comissao->origem = $lancamento->distribuidor_id;
+                        $comissao->destino = $nivel_1->pai;
+                        $comissao->valor = ($lancamento->valor/100) * $config->comissao_neto;
+                        $comissao->pontos = $lancamento->valor/($config->valor_ponto*3);
+                        $comissao->save();
+                        if($nivel_2->pai){
+                            $nivel_3 = \App\Distribuidor::find($nivel_2->pai);
+                            $comissao = new \App\Comissao();
+                            $comissao->nivel = 3;
+                            $comissao->data = $lancamento->data;
+                            $comissao->origem = $lancamento->distribuidor_id;
+                            $comissao->destino = $nivel_2->pai;
+                            $comissao->valor = ($lancamento->valor/100) * $config->comissao_bisneto;
+                            $comissao->pontos = $lancamento->valor/($config->valor_ponto*4);
+                            $comissao->save();
+                        }
+                    }
+                }
+            }
+            
 
             return response()->json(['message' => 'Lancamento created.']);
         } catch (ValidatorException $e) {

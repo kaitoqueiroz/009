@@ -1,12 +1,6 @@
-<h3>Pesquisa de Lançamentos 
-<a ng-href="#/app/lancamentos/create" type="button" class="btn btn-labeled btn-success pull-right">
-	<span class="btn-label">
-		<i class="fa fa-plus"></i>
-	</span>
-	Novo Lançamento
-</a>
-</h3>
-<div class="row" ng-controller="lancamentoController as ctrl" >
+<h3>Relatório de Saldo</h3>
+
+<div class="row" ng-controller="relatorioSaldoController as ctrl" >
     <div class="panel panel-default">
        <div class="panel-body">
             <form class="form-group col-sm-12 no-padding form-horizontal" ng-submit="ctrl.search()">
@@ -115,7 +109,6 @@
                             <th style="text-align:left">Estado</th>
                             <th style="text-align:left">Tipo de Lançamento</th>
                             <th style="text-align:left">Saldo</th>
-                            <th></th>
                         </thead>
                         <tbody>
                             <tr ng-repeat="lancamento in $data">
@@ -135,19 +128,10 @@
                                     (lancamento.tipo == 'debito')?'#f05050':
                                     (lancamento.tipo == 'pagamento')?'#f05050':''
                                 }}">{{lancamento.valor | currency:"R$ "}}</td>
-                                
-                                <td style="text-align:right">
-                                    <a class="btn btn-primary" ng-href="#/app/lancamentos/edit/{{lancamento.id}}">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <button class="btn btn-danger" ng-click="ctrl.delete(lancamento)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
+               </div>
                
                 <div class="panel panel-default">
                    <div class="panel-body">

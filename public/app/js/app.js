@@ -28,7 +28,9 @@
             'app.utils',
             'app.pages',
             'app.distribuidores',
-            'app.lancamentos'
+            'app.lancamentos',
+            'app.relatorios',
+            'app.configs'
         ]);
 })();
 
@@ -96,7 +98,8 @@
 
     angular
         .module('app.routes', [
-            'app.lazyload'
+            'app.lazyload',
+            'ngMask'
         ]);
 })();
 (function() {
@@ -1790,6 +1793,47 @@
     'use strict';
 
     angular
+        .module('app.configs', [
+            // request the the entire framework
+            'angle',
+            // or just modules
+            'app.routes',
+            'app.core',
+            'app.sidebar'
+            /*...*/
+        ])
+        .config(routesConfig);
+
+        routesConfig.$inject = ['$stateProvider', 'RouteHelpersProvider'];
+
+        function routesConfig($stateProvider, helper){
+            $stateProvider
+            .state('app.config_comissao', {
+                url: '/configs/comissao',
+                controller: 'configComissaoController',
+                templateUrl: helper.basepath('pages/configs/comissao.html'),
+                resolve: {
+                    auth: ["auth", function(auth) {
+                        return auth.isAuth();
+                    }]
+                }
+            })
+            .state('app.config_senha', {
+                url: '/configs/senha',
+                controller: 'configSenhaController',
+                templateUrl: helper.basepath('pages/configs/mudar_senha.html'),
+                resolve: {
+                    auth: ["auth", function(auth) {
+                        return auth.isAuth();
+                    }]
+                }
+            })
+    }
+})();
+(function() {
+    'use strict';
+
+    angular
         .module('app.distribuidores', [
             // request the the entire framework
             'angle',
@@ -1886,6 +1930,57 @@
             })
     }
 })();
+(function() {
+    'use strict';
+
+    angular
+        .module('app.relatorios', [
+            // request the the entire framework
+            'angle',
+            // or just modules
+            'app.routes',
+            'app.core',
+            'app.sidebar'
+            /*...*/
+        ])
+        .config(routesConfig);
+
+        routesConfig.$inject = ['$stateProvider', 'RouteHelpersProvider'];
+
+        function routesConfig($stateProvider, helper){
+            $stateProvider
+            .state('app.relatorio_saldo', {
+                url: '/relatorios/saldo',
+                controller: 'relatorioSaldoController',
+                templateUrl: helper.basepath('pages/relatorios/saldo.html'),
+                resolve: {
+                    auth: ["auth", function(auth) {
+                        return auth.isAuth();
+                    }]
+                }
+            })
+            .state('app.relatorio_comissao', {
+                url: '/relatorios/comissao',
+                controller: 'relatorioComissaoController',
+                templateUrl: helper.basepath('pages/relatorios/comissao.html'),
+                resolve: {
+                    auth: ["auth", function(auth) {
+                        return auth.isAuth();
+                    }]
+                }
+            })
+            .state('app.relatorio_pontuacao', {
+                url: '/relatorios/pontuacao',
+                controller: 'relatorioPontuacaoController',
+                templateUrl: helper.basepath('pages/relatorios/pontuacao.html'),
+                resolve: {
+                    auth: ["auth", function(auth) {
+                        return auth.isAuth();
+                    }]
+                }
+            })
+    }
+})();
 
 // To run this code, edit file index.html or index.jade and change
 // html data-ng-app attribute from angle to myAppName
@@ -1921,6 +2016,207 @@
     'use strict';
 
     angular
+        .module('app.lancamentos')
+        .controller('configComissaoController', Controller);
+
+    Controller.$inject = ['$state', '$stateParams', '$filter', 'ngTableParams', 'configService', 'SweetAlert'];
+    function Controller($state, $stateParams, $filter, ngTableParams, configService, SweetAlert) {
+        var vm = this;
+        configService.get(1).then(function(result){
+            vm.entity = result.data;
+        });
+        var sweetAlertConfig = {
+               //text: "Your will not be able to recover this imaginary file!",
+               type: "warning",
+               showCancelButton: true,
+               confirmButtonColor: "#DD6B55",
+               confirmButtonText: "Sim",
+               cancelButtonText: "Não",
+               closeOnConfirm: false,
+               closeOnCancel: false };
+        vm.submit = function(){
+            
+            var request = configService.update(vm.entity);
+            var title = "Editado!";
+            
+            request.then(function(){
+                SweetAlert.swal({
+                   title: title,
+                   type: "success",
+                   showCancelButton: false,
+                   confirmButtonText: "OK",
+                   closeOnConfirm: true},
+                function(isConfirm){ 
+                    if (isConfirm) {
+                        $state.go('app.config_comissao');
+                    }
+                });
+            }, function(){
+                SweetAlert.swal("ERRO!", "Ocorreu um problema ao cadastrar", "error");
+            });
+        }
+
+        vm.search = function(){
+            vm.tableParams.page(1);
+            vm.tableParams.reload();
+        }
+    }
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lancamentos')
+        .controller('configSenhaController', Controller);
+
+    Controller.$inject = ['$state', '$stateParams', '$filter', 'ngTableParams', 'configService', 'SweetAlert'];
+    function Controller($state, $stateParams, $filter, ngTableParams, configService, SweetAlert) {
+        var vm = this;
+        configService.get(1).then(function(result){
+            vm.entity = result.data;
+            console.log();
+        });
+        var sweetAlertConfig = {
+               //text: "Your will not be able to recover this imaginary file!",
+               type: "warning",
+               showCancelButton: true,
+               confirmButtonColor: "#DD6B55",
+               confirmButtonText: "Sim",
+               cancelButtonText: "Não",
+               closeOnConfirm: false,
+               closeOnCancel: false };
+               
+        vm.submit = function(){
+            if(vm.entity.senha != vm.entity.senha_antiga){
+                SweetAlert.swal("ERRO!", "Senha antiga incorreta.", "error");
+                return;
+            }
+            
+            var request = configService.mudarSenha(vm.entity);
+            var title = "Editado!";
+            
+            request.then(function(result){
+                console.log(result);
+                
+                SweetAlert.swal({
+                   title: title,
+                   type: "success",
+                   showCancelButton: false,
+                   confirmButtonText: "OK",
+                   closeOnConfirm: true},
+                function(isConfirm){ 
+                    if (isConfirm) {
+                        $state.go('app.config_senha');
+                    }
+                });
+            }, function(){
+                SweetAlert.swal("ERRO!", "Ocorreu um problema ao cadastrar", "error");
+            });
+        }
+        
+
+        vm.cancelar = function(){
+            SweetAlert.swal({
+               title: "Deseja descartar todas as alterações?",
+               type: "warning",
+               showCancelButton: true,
+               cancelButtonText: "Não",
+               confirmButtonColor: "#DD6B55",
+               confirmButtonText: "Sim",
+               closeOnConfirm: true}, 
+            function(onConfirm){ 
+                if(onConfirm){
+                    $state.go('app.config_senha');
+                }
+            });
+        }
+    }
+})();
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.configs')
+        .service('configService', ['$http','$q', function ($http,$q) {
+
+            var urlBase = 'api/config';
+
+            this.getAll = function () {
+                return $q(function(resolve, reject) {
+                    resolve($http.get(urlBase));
+                });
+            };
+            
+            this.paginate = function (page,search) {
+
+                return $q(function(resolve, reject) {
+                    if(search){
+                        resolve($http.get(urlBase + '?page=' + page +'&search=' + search));
+                    }
+                    resolve($http.get(urlBase + '?page=' + page));
+                });
+            };
+
+            this.search = function (query) {
+                return $q(function(resolve, reject) {
+                    resolve($http.get(urlBase + '?search=' + query));
+                });
+            };
+
+            this.get = function (id) {
+                return $q(function(resolve, reject) {
+                    resolve($http.get(urlBase + '/' + id));
+                });
+            };
+
+            this.insert = function (cust) {
+                return $q(function(resolve, reject) {
+                    resolve($http.post(urlBase, cust));
+                });
+            };
+
+            this.update = function (cust) {
+                return $q(function(resolve, reject) {
+                    resolve($http.put(urlBase + '/' + cust.id, cust));
+                });
+            };
+
+            this.mudarSenha = function (cust) {
+                return $q(function(resolve, reject) {
+                    resolve($http.put(urlBase + '/mudar_senha/' + cust.id, cust));
+                });
+            };
+
+            this.delete = function (id) {
+                return $q(function(resolve, reject) {
+                    resolve($http.delete(urlBase + '/' + id));
+                });
+            };
+
+            this.getEndereco = function (cep) {
+                return $q(function(resolve, reject) {
+                    resolve($http.get("https://viacep.com.br/ws/"+cep+"/json/"));
+                });
+            };
+        }]);
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function() {
+    'use strict';
+
+    angular
         .module('app.distribuidores')
         .controller('distribuidorController', Controller);
 
@@ -1936,7 +2232,12 @@
                cancelButtonText: "Não",
                closeOnConfirm: false,
                closeOnCancel: false };
-        vm.pesquisa = '';
+               
+        vm.entity = {};
+        vm.entity.nome = '';
+        vm.entity.tipo_pessoa = '';
+        vm.entity.cpf_cnpj = '';
+        vm.entity.uf = '';
 
         vm.tableParams = new ngTableParams([
                 {
@@ -1950,8 +2251,15 @@
                     var sorting = params.sorting();
                     var count = params.count();
                     var page = params.page();
+                    
+                    var arr = [];
+                    angular.forEach(vm.entity,function(obj,index){
+                        if(obj){
+                            arr.push(index+":"+obj);
+                        }
+                    });
 
-                    distribuidorService.paginate(page,vm.pesquisa)
+                    distribuidorService.paginate(page,arr.join(";"))
                         .then(function (result) {
                             vm.tableParams.total(result.data.data.total/result.data.data.per_page);
                             $defer.resolve(result.data.data.data);
@@ -2020,7 +2328,8 @@
     Controller.$inject = ['$scope', '$state', '$stateParams', 'distribuidorService','SweetAlert'];
     function Controller($scope, $state, $stateParams, distribuidorService, SweetAlert) {
         if (!$stateParams.id) {
-            $scope.entity = null;
+            $scope.entity = {};
+            $scope.entity.pai = {};
         }else{
             distribuidorService.get($stateParams.id).then(function(result){
                 $scope.entity = result.data.data.data;
@@ -2032,17 +2341,32 @@
         }
         $scope.distribuidores = [];
         distribuidorService.getAll()
-        .then(function (result) {
-            $scope.distribuidores = result.data.data.data;
-            console.log($scope.distribuidores);
-        });
+            .then(function (result) {
+                $scope.distribuidores = result.data.data.data;
+                console.log($scope.distribuidores);
+            });
         
         $scope.selected = undefined;
         
+        $scope.getEndereco = function(){
+            if($scope.entity.cep.length == 8){
+                distribuidorService.getEndereco($scope.entity.cep).then(function(result){
+                    $scope.entity.endereco = result.data.logradouro;
+                    $scope.entity.complemento = result.data.complemento;
+                    $scope.entity.bairro = result.data.bairro;
+                    $scope.entity.municipio = result.data.localidade;
+                    $scope.entity.uf = result.data.uf;
+                    $("#numero").focus();
+                });;
+                
+            }
+        };
         $scope.submit = function(){
             console.log($scope.entity.pai);
             if($scope.entity.pai){
                 $scope.entity.pai = $scope.entity.pai.originalObject.id;
+            }else{
+                delete $scope.entity.pai;
             }
             if($stateParams.id){
                 var request = distribuidorService.update($scope.entity);
@@ -2104,7 +2428,7 @@
 
                 return $q(function(resolve, reject) {
                     if(search){
-                        resolve($http.get(urlBase + '?page=' + page +'&search=nome:' + search));
+                        resolve($http.get(urlBase + '?page=' + page +'&search=' + search));
                     }
                     resolve($http.get(urlBase + '?page=' + page));
                 });
@@ -2139,6 +2463,12 @@
                     resolve($http.delete(urlBase + '/' + id));
                 });
             };
+
+            this.getEndereco = function (cep) {
+                return $q(function(resolve, reject) {
+                    resolve($http.get("https://viacep.com.br/ws/"+cep+"/json/"));
+                });
+            };
         }]);
 })();
 
@@ -2154,9 +2484,18 @@
         .module('app.lancamentos')
         .controller('lancamentoController', Controller);
 
-    Controller.$inject = ['$filter', 'ngTableParams', 'lancamentoService', 'SweetAlert'];
-    function Controller($filter, ngTableParams, lancamentoService, SweetAlert) {
+    Controller.$inject = ['$scope', '$filter', 'ngTableParams', 'lancamentoService', 'distribuidorService', 'SweetAlert'];
+    function Controller($scope, $filter, ngTableParams, lancamentoService, distribuidorService, SweetAlert) {
         var vm = this;
+        vm.entity = {};
+        vm.entity.distribuidor = null;
+        
+        $scope.distribuidores = [];
+        distribuidorService.getAll()
+            .then(function (result) {
+                $scope.distribuidores = result.data.data.data;
+            });
+            
         var sweetAlertConfig = {
                //text: "Your will not be able to recover this imaginary file!",
                type: "warning",
@@ -2167,6 +2506,7 @@
                closeOnConfirm: false,
                closeOnCancel: false };
         vm.pesquisa = '';
+        vm.saldo_total = '';
 
         vm.tableParams = new ngTableParams([
                 {
@@ -2180,11 +2520,25 @@
                     var sorting = params.sorting();
                     var count = params.count();
                     var page = params.page();
-
-                    lancamentoService.paginate(page,vm.pesquisa)
+                    
+                    var arr = [];
+                    angular.forEach(vm.entity,function(obj,index){
+                        if(obj != null){
+                            if(obj.originalObject && index == "distribuidor"){
+                                index = "distribuidor_id";
+                                obj = obj.originalObject.id;
+                            }
+                        }
+                        if(obj){
+                            arr.push(index+":"+obj);
+                        }
+                    });
+                    
+                    lancamentoService.paginate(page,arr.join(";"))
                         .then(function (result) {
                             vm.tableParams.total(result.data.data.total/result.data.data.per_page);
                             $defer.resolve(result.data.data.data);
+                            vm.saldo_total = result.data.saldo_total;
                         });
                 }
             }
@@ -2193,6 +2547,10 @@
         vm.search = function(){
             vm.tableParams.page(1);
             vm.tableParams.reload();
+        }
+
+        vm.distribuidorChange = function(){
+            console.log(vm.entity.distribuidor);
         }
 
         vm.delete = function(obj){
@@ -2211,27 +2569,6 @@
                 }
             });
         }
-        vm.updateAtivo = function(obj){
-            var acao = '';
-            if(!obj.ativo){
-                acao = 'des';
-            }
-            sweetAlertConfig.title = "Tem certeja que deseja "+acao+"ativar este lancamento?";
-
-            SweetAlert.swal(sweetAlertConfig, function(isConfirm){
-                if (isConfirm) {
-                    lancamentoService.update(obj).then(function(){
-                        SweetAlert.swal(""+acao+"ativado!", "Lancamento "+acao+"ativado com sucesso.", "success");
-                    }, function(){
-                        SweetAlert.swal("ERRO!", "Ocorreu um problema ao atualizar", "error");
-                        obj.ativo = !obj.ativo;
-                    });
-                } else {
-                    SweetAlert.swal("Cancelado", "O lancamento não foi "+acao+"ativado", "error");
-                    obj.ativo = !obj.ativo;
-                }
-            });
-        }
     }
 })();
 
@@ -2247,32 +2584,34 @@
         .module('app.lancamentos')
         .controller('lancamentoFormController', Controller);
 
-    Controller.$inject = ['$scope', '$state', '$stateParams', 'lancamentoService','SweetAlert'];
-    function Controller($scope, $state, $stateParams, lancamentoService, SweetAlert) {
+    Controller.$inject = ['$scope', '$state', '$stateParams', 'distribuidorService','lancamentoService','SweetAlert'];
+    function Controller($scope, $state, $stateParams, distribuidorService, lancamentoService, SweetAlert) {
         if (!$stateParams.id) {
-            $scope.entity = null;
+            $scope.entity = {};
+            $scope.entity.distribuidor = {};
         }else{
             lancamentoService.get($stateParams.id).then(function(result){
-                $scope.entity = result.data.data.data;
-                console.log($scope.entity);
+                $scope.entity = result.data.data;
+                $scope.entity.data = new Date($scope.entity.data.replace("-","/"));
+                distribuidorService.get($scope.entity.distribuidor_id).then(function(res){
+                    $scope.entity.distribuidor = res.data.data.data;
+                });
             }),
             function(){
                 SweetAlert.swal("ERRO!", "Ocorreu um problema ao consultar dados", "error");
             };
         }
         $scope.lancamentos = [];
-        lancamentoService.getAll()
+        distribuidorService.getAll()
         .then(function (result) {
-            $scope.lancamentos = result.data.data.data;
-            console.log($scope.lancamentos);
+            $scope.distribuidores = result.data.data.data;
         });
         
         $scope.selected = undefined;
         
         $scope.submit = function(){
-            console.log($scope.entity.pai);
-            if($scope.entity.pai){
-                $scope.entity.pai = $scope.entity.pai.originalObject.id;
+            if($scope.entity.distribuidor){
+                $scope.entity.distribuidor_id = $scope.entity.distribuidor.originalObject.id;
             }
             if($stateParams.id){
                 var request = lancamentoService.update($scope.entity);
@@ -2334,9 +2673,29 @@
 
                 return $q(function(resolve, reject) {
                     if(search){
-                        resolve($http.get(urlBase + '?page=' + page +'&search=nome:' + search));
+                        resolve($http.get(urlBase + '?page=' + page +'&search=' + search));
                     }
                     resolve($http.get(urlBase + '?page=' + page));
+                });
+            };
+            
+            this.paginateComissoes = function (page,search) {
+
+                return $q(function(resolve, reject) {
+                    if(search){
+                        resolve($http.get('api/comissoes?page=' + page +'&search=' + search));
+                    }
+                    resolve($http.get('api/comissoes?page=' + page));
+                });
+            };
+            
+            this.paginatePontos = function (page,search) {
+
+                return $q(function(resolve, reject) {
+                    if(search){
+                        resolve($http.get('api/pontos?page=' + page +'&search=' + search));
+                    }
+                    resolve($http.get('api/pontos?page=' + page));
                 });
             };
 
@@ -2370,4 +2729,236 @@
                 });
             };
         }]);
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lancamentos')
+        .controller('relatorioComissaoController', Controller);
+
+    Controller.$inject = ['$scope', '$filter', 'ngTableParams', 'lancamentoService', 'distribuidorService', 'SweetAlert'];
+    function Controller($scope, $filter, ngTableParams, lancamentoService, distribuidorService, SweetAlert) {
+        var vm = this;
+        vm.entity = {};
+        vm.entity.distribuidor = null;
+        $scope.distribuidores = [];
+        distribuidorService.getAll()
+            .then(function (result) {
+                $scope.distribuidores = result.data.data.data;
+            });
+        var sweetAlertConfig = {
+               //text: "Your will not be able to recover this imaginary file!",
+               type: "warning",
+               showCancelButton: true,
+               confirmButtonColor: "#DD6B55",
+               confirmButtonText: "Sim",
+               cancelButtonText: "Não",
+               closeOnConfirm: false,
+               closeOnCancel: false };
+        vm.pesquisa = '';
+        vm.saldo_total = 0;
+
+        vm.tableParams = new ngTableParams([
+                {
+                    page: 1, 
+                    count: 15
+                }],
+            {
+                counts: [],
+                getData: function ($defer, params) {
+                    var filter = params.filter();
+                    var sorting = params.sorting();
+                    var count = params.count();
+                    var page = params.page();
+                    
+                    var arr = [];
+                    angular.forEach(vm.entity,function(obj,index){
+                        if(obj != null){
+                            if(obj.originalObject && index == "distribuidor"){
+                                index = "destino";
+                                obj = obj.originalObject.id;
+                            }
+                        }
+                        if(obj){
+                            arr.push(index+":"+obj);
+                        }
+                    });
+                    
+                    lancamentoService.paginateComissoes(page,arr.join(";"))
+                        .then(function (result) {
+                            vm.tableParams.total(result.data.data.total/result.data.data.per_page);
+                            $defer.resolve(result.data.data.data);
+                            vm.saldo_total = result.data.saldo_total;
+                        });
+                }
+            }
+        );
+
+        vm.search = function(){
+            vm.tableParams.page(1);
+            vm.tableParams.reload();
+        }
+    }
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lancamentos')
+        .controller('relatorioPontuacaoController', Controller);
+
+    Controller.$inject = ['$scope', '$filter', 'ngTableParams', 'lancamentoService', 'distribuidorService', 'SweetAlert'];
+    function Controller($scope, $filter, ngTableParams, lancamentoService, distribuidorService, SweetAlert) {
+        var vm = this;
+        vm.entity = {};
+        vm.entity.distribuidor = null;
+        
+        $scope.distribuidores = [];
+        distribuidorService.getAll()
+            .then(function (result) {
+                $scope.distribuidores = result.data.data.data;
+            });
+        var sweetAlertConfig = {
+               //text: "Your will not be able to recover this imaginary file!",
+               type: "warning",
+               showCancelButton: true,
+               confirmButtonColor: "#DD6B55",
+               confirmButtonText: "Sim",
+               cancelButtonText: "Não",
+               closeOnConfirm: false,
+               closeOnCancel: false };
+        vm.pesquisa = '';
+        vm.saldo_total = '';
+
+        vm.tableParams = new ngTableParams([
+                {
+                    page: 1, 
+                    count: 15
+                }],
+            {
+                counts: [],
+                getData: function ($defer, params) {
+                    var filter = params.filter();
+                    var sorting = params.sorting();
+                    var count = params.count();
+                    var page = params.page();
+                    
+                    var arr = [];
+                    angular.forEach(vm.entity,function(obj,index){
+                        if(obj != null){
+                            if(obj.originalObject && index == "distribuidor"){
+                                index = "distribuidor_id";
+                                obj = obj.originalObject.id;
+                            }
+                        }
+                        if(obj){
+                            arr.push(index+":"+obj);
+                        }
+                    });
+                    
+                    lancamentoService.paginate(page,arr.join(";"))
+                        .then(function (result) {
+                            vm.tableParams.total(result.data.data.total/result.data.data.per_page);
+                            $defer.resolve(result.data.data.data);
+                            vm.saldo_total = result.data.saldo_total;
+                        });
+                }
+            }
+        );
+
+        vm.search = function(){
+            vm.tableParams.page(1);
+            vm.tableParams.reload();
+        }
+    }
+})();
+
+
+// To run this code, edit file index.html or index.jade and change
+// html data-ng-app attribute from angle to myAppName
+// ----------------------------------------------------------------------
+
+(function() {
+    'use strict';
+
+    angular
+        .module('app.lancamentos')
+        .controller('relatorioSaldoController', Controller);
+
+    Controller.$inject = ['$scope', '$filter', 'ngTableParams', 'lancamentoService', 'distribuidorService', 'SweetAlert'];
+    function Controller($scope,$filter, ngTableParams, lancamentoService, distribuidorService, SweetAlert) {
+        var vm = this;
+        vm.entity = {};
+        vm.entity.distribuidor = null;
+        $scope.distribuidores = [];
+        distribuidorService.getAll()
+            .then(function (result) {
+                $scope.distribuidores = result.data.data.data;
+            });
+        var sweetAlertConfig = {
+               //text: "Your will not be able to recover this imaginary file!",
+               type: "warning",
+               showCancelButton: true,
+               confirmButtonColor: "#DD6B55",
+               confirmButtonText: "Sim",
+               cancelButtonText: "Não",
+               closeOnConfirm: false,
+               closeOnCancel: false };
+        vm.pesquisa = '';
+        vm.saldo_total = '';
+
+        vm.tableParams = new ngTableParams([
+                {
+                    page: 1, 
+                    count: 15
+                }],
+            {
+                counts: [],
+                getData: function ($defer, params) {
+                    var filter = params.filter();
+                    var sorting = params.sorting();
+                    var count = params.count();
+                    var page = params.page();
+                    
+                    var arr = [];
+                    angular.forEach(vm.entity,function(obj,index){
+                        if(obj != null){
+                            if(obj.originalObject && index == "distribuidor"){
+                                index = "distribuidor_id";
+                                obj = obj.originalObject.id;
+                            }
+                        }
+                        if(obj){
+                            arr.push(index+":"+obj);
+                        }
+                    });
+                    
+                    lancamentoService.paginate(page,arr.join(";"))
+                        .then(function (result) {
+                            vm.tableParams.total(result.data.data.total/result.data.data.per_page);
+                            $defer.resolve(result.data.data.data);
+                            vm.saldo_total = result.data.saldo_total;
+                        });
+                }
+            }
+        );
+
+        vm.search = function(){
+            vm.tableParams.page(1);
+            vm.tableParams.reload();
+        }
+    }
 })();

@@ -17,9 +17,29 @@
 
                 return $q(function(resolve, reject) {
                     if(search){
-                        resolve($http.get(urlBase + '?page=' + page +'&search=nome:' + search));
+                        resolve($http.get(urlBase + '?page=' + page +'&search=' + search));
                     }
                     resolve($http.get(urlBase + '?page=' + page));
+                });
+            };
+            
+            this.paginateComissoes = function (page,search) {
+
+                return $q(function(resolve, reject) {
+                    if(search){
+                        resolve($http.get('api/comissoes?page=' + page +'&search=' + search));
+                    }
+                    resolve($http.get('api/comissoes?page=' + page));
+                });
+            };
+            
+            this.paginatePontos = function (page,search) {
+
+                return $q(function(resolve, reject) {
+                    if(search){
+                        resolve($http.get('api/pontos?page=' + page +'&search=' + search));
+                    }
+                    resolve($http.get('api/pontos?page=' + page));
                 });
             };
 

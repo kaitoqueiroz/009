@@ -35,5 +35,19 @@
         "text": "Pontuação",
         "sref": "app.relatorio_pontuacao"
       }]
+  },
+  {
+    "text": "Configurações",
+    "sref": "#",
+    "icon": "fa fa-gear",
+    "submenu": [
+      {
+        "text": "Alterar Senha",
+        "sref": "app.config_senha"
+      },
+      {
+        "text": "Comissões e Pontuação",
+        "sref": "app.config_comissao"
+      }]
   }
 ]

@@ -9,18 +9,74 @@
 <div class="row" ng-controller="distribuidorController as ctrl" >
     <div class="panel panel-default">
        <div class="panel-body">
-            <form class="form-group col-sm-12 no-padding" ng-submit="ctrl.search()">
-                <div class="col-sm-10">
-                    <input type="text" ng-model="ctrl.pesquisa" placeholder="Pesquisar" class="form-control col-sm-5">
+            <form class="form-group col-sm-12 no-padding form-horizontal" ng-submit="ctrl.search()">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-2">Nome</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="ctrl.entity.nome" class="form-control col-sm-5">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2">Tipo de Pessoa</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" ng-model="ctrl.entity.tipo_pessoa">
+                                <option value=""></option>
+                                <option value="fisica">Física</option>
+                                <option value="juridica">Jurídica</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col-sm-2">
-                    <button type="submit" class="btn btn-labeled btn-primary pull-right">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-2">CPF/CNPJ</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="ctrl.entity.cpf_cnpj" class="form-control col-sm-5">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2">Estado</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" ng-model="ctrl.entity.uf">
+                                <option value=""></option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 center-block">
+                    <button type="submit" class="btn btn-labeled btn-primary center-block">
                         <span class="btn-label">
                             <i class="fa fa-search"></i>
                         </span> Pesquisar
                     </button>
-                    
                 </div>
             </form>
             <div class="form-group col-sm-12">

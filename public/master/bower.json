@@ -61,6 +61,8 @@
     "ngSweetAlert": "^1.1.0",
     "allmighty-autocomplete": "*",
     "angularjs-autocomplete": "^0.4.8",
-    "angucomplete-alt": "^2.4.1"
+    "angucomplete-alt": "^2.4.1",
+    "ngMask": "angular-mask#^3.1.1",
+    "angular-i18n": "^1.5.7"
   }
 }

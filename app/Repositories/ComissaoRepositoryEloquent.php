@@ -4,25 +4,23 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\LancamentoRepository;
-use App\Entities\Lancamento;
-use App\Validators\LancamentoValidator;
+use App\Repositories\ComissaoRepository;
+use App\Entities\Comissao;
+use App\Validators\ComissaoValidator;
 
 /**
- * Class LancamentoRepositoryEloquent
+ * Class ComissaoRepositoryEloquent
  * @package namespace App\Repositories;
  */
-class LancamentoRepositoryEloquent extends BaseRepository implements LancamentoRepository
+class ComissaoRepositoryEloquent extends BaseRepository implements ComissaoRepository
 {
-    
     protected $fieldSearchable = [
         "id",
-        "tipo",
+        "destino",
+        "origem",
         "valor",
-        "observacao",
         "data",
-        "pontos",
-        "distribuidor_id"
+        "pontos"
     ];
     /**
      * Specify Model class name
@@ -31,7 +29,7 @@ class LancamentoRepositoryEloquent extends BaseRepository implements LancamentoR
      */
     public function model()
     {
-        return Lancamento::class;
+        return Comissao::class;
     }
 
     /**
@@ -42,7 +40,7 @@ class LancamentoRepositoryEloquent extends BaseRepository implements LancamentoR
     public function validator()
     {
 
-        return LancamentoValidator::class;
+        return ComissaoValidator::class;
     }
 
 

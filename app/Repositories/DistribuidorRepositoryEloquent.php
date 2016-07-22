@@ -14,11 +14,25 @@ use App\Validators\DistribuidorValidator;
  */
 class DistribuidorRepositoryEloquent extends BaseRepository implements DistribuidorRepository
 {
-    /**
-     * @var array
-     */
+    
     protected $fieldSearchable = [
-        'nome'=>'like'
+        "id",
+        "nome"=>'like',
+        "fantasia"=>'like',
+        "pai",
+        "tipo_pessoa"=>'like',
+        "cpf_cnpj"=>'like',
+        "rg",
+        "cep",
+        "municipio",
+        "uf"=>'like',
+        "endereco",
+        "numero",
+        "complemento",
+        "bairro",
+        "fone",
+        "celular",
+        "email"
     ];
     /**
      * Specify Model class name

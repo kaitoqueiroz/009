@@ -1,0 +1,48 @@
+<h3>Configurar Comissões e Pontuação</h3>
+
+<div class="row" ng-controller="configComissaoController as ctrl" >
+    <div class="panel panel-default">
+       <div class="panel-body">
+            <form class="form-group col-sm-4 no-padding" ng-submit="ctrl.search()">
+                <div class="form-group col-sm-12">
+                    <label class="col-sm-5">Nível Filho</label>
+                    <div class="col-sm-7 no-padding input-group">
+                        <input type="number" ng-model="ctrl.entity.comissao_filho" class="form-control col-sm-5">
+                        <span class="input-group-addon">%</span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label class="col-sm-5">Nível Neto</label>
+                    <div class="col-sm-7 no-padding input-group">
+                        <input type="number" ng-model="ctrl.entity.comissao_neto" class="form-control col-sm-5">
+                        <span class="input-group-addon">%</span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label class="col-sm-5">Nível Bisneto</label>
+                    <div class="col-sm-7 no-padding input-group">
+                        <input type="number" ng-model="ctrl.entity.comissao_bisneto" class="form-control col-sm-5">
+                        <span class="input-group-addon">%</span>
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <label class="col-sm-5">Valor Ponto</label>
+                    <div class="col-sm-7 no-padding input-group">
+                        <span class="input-group-addon">R$</span>
+                        <input type="number" ng-model="ctrl.entity.valor_ponto" class="form-control col-sm-5">
+                    </div>
+                </div>
+                
+            </form>
+            <div>&nbsp;</div>
+            <legend></legend>
+            <div class="form-group col-sm-12 text-center">
+                <button type="button" ng-click="ctrl.submit()" class="btn btn-labeled btn-primary">
+                    <span class="btn-label">
+                        <i class="fa fa-save"></i>
+                    </span> Salvar
+                </button>
+            </div>
+       </div>
+    </div>
+</div>
