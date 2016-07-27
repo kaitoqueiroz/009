@@ -14,6 +14,7 @@
     function Controller($scope, $state, $stateParams, distribuidorService, lancamentoService, SweetAlert) {
         if (!$stateParams.id) {
             $scope.entity = {};
+            $scope.entity.data = new Date();
             $scope.entity.distribuidor = {};
         }else{
             lancamentoService.get($stateParams.id).then(function(result){
