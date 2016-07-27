@@ -40,9 +40,10 @@ class ComissoesController extends Controller
         ->leftJoin("lancamentos","distribuidores.id","=","lancamentos.distribuidor_id")
         ->leftJoin("comissoes","distribuidores.id","=","comissoes.destino")
         ->addSelect("distribuidores.*")
-        ->addSelect("sum(lancamentos.pontos)")
+        ->addSelect(\DB::raw("sum(lancamentos.pontos) + sum(comissoes.pontos) as pontos"))
         ->groupBy("distribuidores.id")
-        ->get();
+        ->toSql();
+        dd($dados);
         return response()->json([
             'data' => $dados
         ]);

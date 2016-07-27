@@ -129,7 +129,7 @@ class LancamentosController extends Controller
                 $dados["pontos"] = $dados["valor"]/($config->valor_ponto);
             }
             
-            $lancamento = $this->repository->create($request->all());
+            $lancamento = $this->repository->create($dados);
             
             if($dados["tipo"] == 'debito'){
                 $distribuidor = \App\Distribuidor::find($lancamento->distribuidor_id);
