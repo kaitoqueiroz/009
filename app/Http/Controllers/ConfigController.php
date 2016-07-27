@@ -13,7 +13,7 @@ class ConfigController extends Controller
     {
         $config = Config::find($request->input('id'));
         $config->usuario = $request->input('usuario');
-        $config->senha = $request->input('nova_senha');
+        $config->senha = \Crypt::encrypt($request->input('nova_senha'));
         $config->save();
         
         return response()->json(['message' => 'updated.']);

@@ -72,7 +72,19 @@ class AuthController extends Controller
     }
 
     public function login(Request $request){
-        $request->session()->put('user', $request->input('username'));
-        return \Response::json(['message'=>'success']);
+        $usuario = $request->input('username');
+        $senha = $request->input('password');
+        $result = \App\Config::where('usuario',$usuario)->first();
+
+        if($result){
+            if($senha == \Crypt::decrypt($result->senha)){
+                $request->session()->put('user', $request->input('username'));
+                return \Response::json(['message'=>'success']);
+            }else{
+                return \Response::json([ 'error' => 401, 'message' => 'Usuário e/ou senha incorreto(s)' ],401);
+            }
+        }else{
+            return \Response::json([ 'error' => 401, 'message' => 'Usuário e/ou senha incorreto(s)' ],401);
+        }
     }
 }
