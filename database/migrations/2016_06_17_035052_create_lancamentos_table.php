@@ -19,7 +19,7 @@ class CreateLancamentosTable extends Migration
             $table->float('valor');
             $table->text('observacao');
             $table->date('data');
-            $table->integer('pontos');
+            $table->double('pontos');
             
             $table->integer('distribuidor_id')->unsigned();
             $table->foreign('distribuidor_id')->references('id')->on('distribuidores');

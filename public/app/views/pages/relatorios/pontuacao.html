@@ -23,9 +23,11 @@
                             match-class="highlight"></div>
                         </div>
                     </div>
+                </div>
+                <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-12 no-padding">Estado</label>
-                        <div class="col-sm-12 no-padding">
+                        <label class="col-sm-12">Estado</label>
+                        <div class="col-sm-12">
                             <select class="form-control" ng-model="ctrl.entity.uf">
                                 <option value=""></option>
                                 <option value="AC">Acre</option>
@@ -59,28 +61,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="col-sm-12">Período</label>
-                        <div class="col-sm-6">
-                            <input id="de"
-                                type="{{inputType_de || 'text'}}" 
-                                ng-focus="inputType_de = 'date'" 
-                                ng-blur="inputType_de = (ctrl.entity.de)?'date':'text'" 
-                                placeholder="De:" 
-                                ng-model="ctrl.entity.de" 
-                                class="form-control col-sm-5">
-                        </div>
-                        <div class="col-sm-6">
-                            <input id="ate"
-                                type="{{inputType_ate || 'text'}}" 
-                                ng-focus="inputType_ate = 'date'" 
-                                ng-blur="inputType_ate = (ctrl.entity.de)?'date':'text'" 
-                                placeholder="Até:" ng-model="ctrl.entity.ate" 
-                                class="form-control col-sm-5">
-                        </div>
-                    </div>
-                </div>
                 <div class="col-sm-12 center-block">
                     <button type="submit" class="btn btn-labeled btn-primary center-block">
                         <span class="btn-label">
@@ -94,20 +74,16 @@
                     <table ng-table="ctrl.tableParams" class="table">
                         <thead>
                             <th style="text-align:left">Distribuidor</th>
-                            <th style="text-align:left">Data</th>
                             <th style="text-align:left">Estado</th>
-                            <th style="text-align:left">Tipo de Lançamento</th>
                             <th style="text-align:left">Saldo</th>
                             <th style="text-align:left">Pontuação</th>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="lancamento in $data">
-                                <td>{{lancamento.distribuidor.nome}}</td>
-                                <td>{{lancamento.data | date:'dd/MM/yyyy'}}</td>
-                                <td>{{lancamento.distribuidor.uf}}</td>
-                                <td>{{lancamento.tipo}}</td>
-                                <td>{{lancamento.valor | currency:"R$ "}}</td>
-                                <td>{{lancamento.pontos | currency:""}}</td>
+                            <tr ng-repeat="obj in $data">
+                                <td>{{obj.nome}}</td>
+                                <td>{{obj.uf}}</td>
+                                <td>{{obj.valor | currency:"R$ "}}</td>
+                                <td>{{obj.pontos | currency:"":0 || 0}}</td>
                             </tr>
                         </tbody>
                     </table>

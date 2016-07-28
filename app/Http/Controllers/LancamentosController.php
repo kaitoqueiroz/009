@@ -126,9 +126,8 @@ class LancamentosController extends Controller
             $dados = $request->all();
             $config = \App\Config::find(1);
             if($dados["tipo"] == 'debito'){
-                $dados["pontos"] = $dados["valor"]/($config->valor_ponto);
+                $dados["pontos"] = round($dados["valor"]/($config->valor_ponto),2);
             }
-            
             $lancamento = $this->repository->create($dados);
             
             if($dados["tipo"] == 'debito'){

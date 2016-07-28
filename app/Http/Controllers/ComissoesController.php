@@ -36,14 +36,25 @@ class ComissoesController extends Controller
     
     public function pontos(Request $request)
     {
-        $dados = \DB::table("distribuidores")
+        $request = $request->all();
+        $filtros = array();
+        if(isset($request["search"])){
+            $filtros = explode(";",str_replace(":","='",$request["search"]."'"));
+        }
+        $qb = \DB::table("distribuidores")
         ->leftJoin("lancamentos","distribuidores.id","=","lancamentos.distribuidor_id")
         ->leftJoin("comissoes","distribuidores.id","=","comissoes.destino")
         ->addSelect("distribuidores.*")
-        ->addSelect(\DB::raw("sum(lancamentos.pontos) + sum(comissoes.pontos) as pontos"))
-        ->groupBy("distribuidores.id")
-        ->toSql();
-        dd($dados);
+        ->addSelect(\DB::raw("sum(case when tipo='credito' then lancamentos.valor else 0 end) -
+                sum(case when tipo!='credito' then lancamentos.valor else 0 end) as valor"))
+        ->addSelect(\DB::raw("floor(coalesce(sum(lancamentos.pontos),0) + coalesce(sum(comissoes.pontos),0)) as pontos"))
+        ->groupBy("distribuidores.id");
+        
+        foreach($filtros as $filtro){
+            $qb = $qb->whereRaw($filtro);
+        }
+        
+        $dados = $qb->get();
         return response()->json([
             'data' => $dados
         ]);

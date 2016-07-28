@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lancamento extends Model
 {
-    protected $fillable = ['tipo','observacao','valor','data','distribuidor_id'];
+    protected $fillable = ['tipo','observacao','valor','pontos','data','distribuidor_id'];
     
     public function distribuidor()
     {
