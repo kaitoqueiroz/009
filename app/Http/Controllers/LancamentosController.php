@@ -123,13 +123,18 @@ class LancamentosController extends Controller
                 $filtros[$arr[0]] = $arr[1];
             }
         }
-        $lancamentosAll = $this->repository->all();
+        $repo = $this->repository;
+        if(!$request->input('comissao')){
+            // $repo = $repo->where("tipo","!=","comissao");
+        }
+        // dd($repo->toSql());
+        
+        $lancamentosAll = $repo->all();
         $count = 30;
         if(isset($filtros["de"]) || isset($filtros["ate"])){
             $count = count($lancamentosAll);
-            $lancamentosAll = $this->repository->orderBy('data','desc')->paginate($count);
         }
-        $lancamentos = $this->repository->orderBy('data','desc')->paginate($count);
+        $lancamentos = $repo->orderBy('data','desc')->paginate($count);
         foreach($lancamentos as $k=>$value){
             $value->distribuidor = Distribuidor::find($value->distribuidor_id);
             if(isset($value->distribuidor->pai)){
@@ -224,7 +229,14 @@ class LancamentosController extends Controller
                     $comissao->valor = ($lancamento->valor/100) * $config->comissao_filho;
                     $comissao->pontos = $lancamento->valor/($config->valor_ponto*2);
                     $comissao->save();
-                    $this->repository->create($dados);
+                    
+                    $lancamento_comissao = new Lancamento();
+                    $lancamento_comissao->tipo = 'comissao';
+                    $lancamento_comissao->valor = $comissao->valor;
+                    $lancamento_comissao->observacao = "Comissão gerada automaticamente.";
+                    $lancamento_comissao->data = $comissao->data;
+                    $lancamento_comissao->distribuidor_id = $comissao->destino;
+                    $lancamento_comissao->save();
                     if($nivel_1->pai){
                         $nivel_2 = \App\Distribuidor::find($nivel_1->pai);
                         $comissao = new \App\Comissao();
@@ -235,6 +247,14 @@ class LancamentosController extends Controller
                         $comissao->valor = ($lancamento->valor/100) * $config->comissao_neto;
                         $comissao->pontos = $lancamento->valor/($config->valor_ponto*3);
                         $comissao->save();
+                    
+                        $lancamento_comissao = new Lancamento();
+                        $lancamento_comissao->tipo = 'comissao';
+                        $lancamento_comissao->valor = $comissao->valor;
+                        $lancamento_comissao->observacao = "Comissão gerada automaticamente.";
+                        $lancamento_comissao->data = $comissao->data;
+                        $lancamento_comissao->distribuidor_id = $comissao->destino;
+                        $lancamento_comissao->save();
                         if($nivel_2->pai){
                             $nivel_3 = \App\Distribuidor::find($nivel_2->pai);
                             $comissao = new \App\Comissao();
@@ -245,6 +265,14 @@ class LancamentosController extends Controller
                             $comissao->valor = ($lancamento->valor/100) * $config->comissao_bisneto;
                             $comissao->pontos = $lancamento->valor/($config->valor_ponto*4);
                             $comissao->save();
+                    
+                            $lancamento_comissao = new Lancamento();
+                            $lancamento_comissao->tipo = 'comissao';
+                            $lancamento_comissao->valor = $comissao->valor;
+                            $lancamento_comissao->observacao = "Comissão gerada automaticamente.";
+                            $lancamento_comissao->data = $comissao->data;
+                            $lancamento_comissao->distribuidor_id = $comissao->destino;
+                            $lancamento_comissao->save();
                         }
                     }
                 }

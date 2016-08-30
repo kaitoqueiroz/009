@@ -23,6 +23,16 @@
                 });
             };
             
+            this.paginateSaldo = function (page,search) {
+
+                return $q(function(resolve, reject) {
+                    if(search){
+                        resolve($http.get(urlBase + '?page=' + page +'&search=' + search + '&comissao=true'));
+                    }
+                    resolve($http.get(urlBase + '?page=' + page));
+                });
+            };
+            
             this.paginateComissoes = function (page,search) {
 
                 return $q(function(resolve, reject) {

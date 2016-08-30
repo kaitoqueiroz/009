@@ -58,7 +58,7 @@
                         }
                     });
                     
-                    lancamentoService.paginate(page,arr.join(";"))
+                    lancamentoService.paginateSaldo(page,arr.join(";"))
                         .then(function (result) {
                             vm.tableParams.total(result.data.data.total/result.data.data.per_page);
                             $defer.resolve(result.data.data.data);
