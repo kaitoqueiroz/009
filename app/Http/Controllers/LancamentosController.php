@@ -52,11 +52,18 @@ class LancamentosController extends Controller
                 $filtros[$arr[0]] = $arr[1];
             }
         }
-        $lancamentos = $this->repository->orderBy('data','desc');
-        $lancamentos = $lancamentos->paginate();
+        $lancamentosAll = $this->repository->all();
+        $count = 30;
+        if(isset($filtros["de"]) || isset($filtros["ate"])){
+            $count = count($lancamentosAll);
+            $lancamentosAll = $this->repository->orderBy('data','desc')->paginate($count);
+        }
+        $lancamentos = $this->repository->orderBy('data','desc')->paginate($count);
         foreach($lancamentos as $k=>$value){
             $value->distribuidor = Distribuidor::find($value->distribuidor_id);
-            $value->distribuidor->pai = Distribuidor::find($value->distribuidor->pai);
+            if(isset($value->distribuidor->pai)){
+                $value->distribuidor->pai = Distribuidor::find($value->distribuidor->pai);
+            }
             
             if(isset($filtros["de"]) || isset($filtros["ate"])){
                 $data = strtotime($value->data);
@@ -81,15 +88,90 @@ class LancamentosController extends Controller
             }
         }
         $saldo_total = 0;
-        foreach($lancamentos as $i=>$lancamento){
-            if($lancamento["tipo"] == "credito"){
+
+        if(isset($filtros["de"]) || isset($filtros["ate"])){
+            $lancamentosAll = $lancamentos;
+        }
+        foreach($lancamentosAll as $i=>$lancamento){
+            if($lancamento["tipo"] == "credito" || $lancamento["tipo"] == "pagamento"){
                 $saldo_total+=$lancamento["valor"];
             }else{
                 $saldo_total-=$lancamento["valor"];
             }
         }
         $lancamentos->saldo_total = $saldo_total;
-        //dd($lancamentos);
+        // dd($lancamentos);
+        return response()->json([
+            'data' => $lancamentos,
+            'saldo_total' => $saldo_total
+        ]);
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function saldo(Request $request)
+    {
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        $filtros = array();
+        foreach(explode(";", $request->input('search')) as $key=>$val){
+            if($val){
+                $arr = explode(":", $val);
+                $filtros[$arr[0]] = $arr[1];
+            }
+        }
+        $lancamentosAll = $this->repository->all();
+        $count = 30;
+        if(isset($filtros["de"]) || isset($filtros["ate"])){
+            $count = count($lancamentosAll);
+            $lancamentosAll = $this->repository->orderBy('data','desc')->paginate($count);
+        }
+        $lancamentos = $this->repository->orderBy('data','desc')->paginate($count);
+        foreach($lancamentos as $k=>$value){
+            $value->distribuidor = Distribuidor::find($value->distribuidor_id);
+            if(isset($value->distribuidor->pai)){
+                $value->distribuidor->pai = Distribuidor::find($value->distribuidor->pai);
+            }
+            
+            if(isset($filtros["de"]) || isset($filtros["ate"])){
+                $data = strtotime($value->data);
+                if(isset($filtros["de"])){
+                    $de = strtotime($filtros["de"]);
+                }else{
+                    $de = strtotime(date("Y-m-d"));
+                }
+                if(isset($filtros["ate"])){
+                    $ate = strtotime($filtros["ate"]);
+                }else{
+                    $ate = strtotime(date("Y-m-d"));
+                }
+                if(!($data > $de && $data < $ate)) {
+                    unset($lancamentos[$k]);
+                }
+                
+            }elseif(isset($filtros["uf"])){
+                if(!($value->distribuidor->uf == $filtros["uf"])){
+                    unset($lancamentos[$k]);
+                }
+            }
+        }
+        $saldo_total = 0;
+
+        if(isset($filtros["de"]) || isset($filtros["ate"])){
+            $lancamentosAll = $lancamentos;
+        }
+        foreach($lancamentosAll as $i=>$lancamento){
+            if($lancamento["tipo"] == "credito" || $lancamento["tipo"] == "pagamento"){
+                $saldo_total+=$lancamento["valor"];
+            }else{
+                $saldo_total-=$lancamento["valor"];
+            }
+        }
+        $lancamentos->saldo_total = $saldo_total;
+        // dd($lancamentos);
         return response()->json([
             'data' => $lancamentos,
             'saldo_total' => $saldo_total
@@ -142,6 +224,7 @@ class LancamentosController extends Controller
                     $comissao->valor = ($lancamento->valor/100) * $config->comissao_filho;
                     $comissao->pontos = $lancamento->valor/($config->valor_ponto*2);
                     $comissao->save();
+                    $this->repository->create($dados);
                     if($nivel_1->pai){
                         $nivel_2 = \App\Distribuidor::find($nivel_1->pai);
                         $comissao = new \App\Comissao();

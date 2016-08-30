@@ -48,6 +48,10 @@ class ConfigController extends Controller
     public function show($id)
     {
         $config = Config::find($id);
+        $config->comissao_filho = (int) $config->comissao_filho;
+        $config->comissao_neto = (int) $config->comissao_neto;
+        $config->comissao_bisneto = (int) $config->comissao_bisneto;
+        $config->valor_ponto = (int) $config->valor_ponto;
         return response()->json($config);
     }
 }

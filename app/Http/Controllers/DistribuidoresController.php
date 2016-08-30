@@ -45,7 +45,7 @@ class DistribuidoresController extends Controller
 
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         $distribuidores = $this->repository->orderBy('id','desc')
-            ->paginate(null,["id",
+            ->paginate(5000,["id",
                 "nome",
                 "fantasia",
                 "pai",

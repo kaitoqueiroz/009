@@ -45,8 +45,8 @@ class ComissoesController extends Controller
         ->leftJoin("lancamentos","distribuidores.id","=","lancamentos.distribuidor_id")
         ->leftJoin("comissoes","distribuidores.id","=","comissoes.destino")
         ->addSelect("distribuidores.*")
-        ->addSelect(\DB::raw("sum(case when tipo='credito' then lancamentos.valor else 0 end) -
-                sum(case when tipo!='credito' then lancamentos.valor else 0 end) as valor"))
+        ->addSelect(\DB::raw("sum(case when (tipo='credito' or tipo='pagamento') then lancamentos.valor else 0 end) -
+                sum(case when (tipo!='credito' and tipo!='pagamento') then lancamentos.valor else 0 end) as valor"))
         ->addSelect(\DB::raw("floor(coalesce(sum(lancamentos.pontos),0) + coalesce(sum(comissoes.pontos),0)) as pontos"))
         ->groupBy("distribuidores.id");
         
