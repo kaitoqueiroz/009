@@ -44,7 +44,7 @@
                     var sorting = params.sorting();
                     var count = params.count();
                     var page = params.page();
-                    var download = params.download;
+                    var download = params.download();
                     
                     var arr = [];
                     angular.forEach(vm.entity,function(obj,index){
@@ -83,6 +83,7 @@
         );
 
         vm.search = function(){
+            vm.tableParams.download = false;
             vm.tableParams.page(1);
             vm.tableParams.reload();
         }

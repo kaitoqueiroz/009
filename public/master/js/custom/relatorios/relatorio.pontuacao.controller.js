@@ -84,12 +84,13 @@
         );
 
         vm.search = function(){
+            vm.tableParams.download(false);
             vm.tableParams.page(1);
             vm.tableParams.reload();
         }
 
         vm.download = function(){
-            vm.tableParams.download = true;
+            vm.tableParams.download(true);
             vm.tableParams.page(1);
             vm.tableParams.reload();
         }
