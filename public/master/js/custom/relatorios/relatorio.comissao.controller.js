@@ -44,7 +44,7 @@
                     var sorting = params.sorting();
                     var count = params.count();
                     var page = params.page();
-                    var download = params.download();
+                    var download = params.download;
                     
                     var arr = [];
                     angular.forEach(vm.entity,function(obj,index){
@@ -70,6 +70,7 @@
                             target: '_blank',
                             download: 'comissoes_'+Date.now()+'.pdf'
                         })[0].click();
+                        params.download = false;
                     }else{
                         lancamentoService.paginateComissoes(page,arr.join(";"))
                             .then(function (result) {
@@ -83,7 +84,6 @@
         );
 
         vm.search = function(){
-            vm.tableParams.download = false;
             vm.tableParams.page(1);
             vm.tableParams.reload();
         }

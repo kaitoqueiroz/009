@@ -71,6 +71,7 @@
                             target: '_blank',
                             download: 'pontos_'+Date.now()+'.pdf'
                         })[0].click();
+                        params.download = false;
                     }else{
                         lancamentoService.paginatePontos(page,arr.join(";"))
                             .then(function (result) {
@@ -84,13 +85,12 @@
         );
 
         vm.search = function(){
-            vm.tableParams.download(false);
             vm.tableParams.page(1);
             vm.tableParams.reload();
         }
 
         vm.download = function(){
-            vm.tableParams.download(true);
+            vm.tableParams.download = true;
             vm.tableParams.page(1);
             vm.tableParams.reload();
         }
