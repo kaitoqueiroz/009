@@ -100,7 +100,9 @@ class LancamentosController extends Controller
             }
         }
         $lancamentos->saldo_total = $saldo_total;
-        // dd($lancamentos);
+        if($request->input('download')){
+            return $this->pdf_saldo($lancamentos,$saldo_total);
+        }
         return response()->json([
             'data' => $lancamentos,
             'saldo_total' => $saldo_total
@@ -176,7 +178,9 @@ class LancamentosController extends Controller
             }
         }
         $lancamentos->saldo_total = $saldo_total;
-        // dd($lancamentos);
+        if($request->input('download')){
+            return $this->pdf_saldo($lancamentos,$saldo_total);
+        }
         return response()->json([
             'data' => $lancamentos,
             'saldo_total' => $saldo_total
@@ -374,5 +378,65 @@ class LancamentosController extends Controller
         }
 
         return redirect()->back()->with('message', 'Lancamento deleted.');
+    }
+    
+    public function pdf_saldo($dados, $saldo_total)
+    {
+        $pdf = \App::make('dompdf.wrapper');
+        $html = '
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            th, td {
+                text-align: left;
+                padding: 8px;
+            }
+            
+            tr:nth-child(even){background-color: #f2f2f2}
+        </style>
+        <center><h1>Relatório de Saldo</h1></center>
+        <table>
+            <tr>
+                <th> Distribuidor </th>
+                <th> Pai </th>
+                <th> Data </th>
+                <th> Estado </th>
+                <th> Tipo de Lançamento </th>
+                <th> Saldo </th>
+            </tr>
+            ';
+        foreach($dados as $dado){
+            $html.= '
+                <tr>
+                    <td> '.$dado->distribuidor->nome.' </td>
+                    <td> '.$dado->distribuidor->pai->nome.' </td>
+                    <td> '.$dado->data.' </td>
+                    <td> '.$dado->distribuidor->uf.' </td>
+                    <td> '.$dado->tipo.' </td>
+                    <td> '.number_format($dado->valor, 2, ',', '.').' </td>
+                </tr>
+            ';
+        }
+        $html.= '
+            <tr>
+                <td colspan="6">  </td>
+            </tr>
+            <tr>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td> Saldo Total: </td>
+                <td> '.number_format($saldo_total, 2, ',', '.').' </td>
+            </tr>
+        ';
+        $html.='</table>';
+        
+        $pdf->loadHTML($html);
+        
+        return $pdf->stream();
     }
 }

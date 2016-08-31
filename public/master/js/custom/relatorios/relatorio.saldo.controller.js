@@ -44,6 +44,7 @@
                     var sorting = params.sorting();
                     var count = params.count();
                     var page = params.page();
+                    var download = params.download;
                     
                     var arr = [];
                     angular.forEach(vm.entity,function(obj,index){
@@ -58,17 +59,32 @@
                         }
                     });
                     
-                    lancamentoService.paginateSaldo(page,arr.join(";"))
-                        .then(function (result) {
-                            vm.tableParams.total(result.data.data.total/result.data.data.per_page);
-                            $defer.resolve(result.data.data.data);
-                            vm.saldo_total = result.data.saldo_total;
-                        });
+                    if(download){
+                        var search = '';
+                        if(arr.join(";")){
+                            search = '&search='+arr.join(";");
+                        }
+                        var anchor = angular.element('<a/>');
+                        anchor.attr({
+                            href: 'api/lancamentos?download=true' + search,
+                            target: '_blank',
+                            download: 'saldo_'+Date.now()+'.pdf'
+                        })[0].click();
+                    }else{
+                    
+                        lancamentoService.paginateSaldo(page,arr.join(";"))
+                            .then(function (result) {
+                                vm.tableParams.total(result.data.data.total/result.data.data.per_page);
+                                $defer.resolve(result.data.data.data);
+                                vm.saldo_total = result.data.saldo_total;
+                            });
+                    }
                 }
             }
         );
 
-        vm.search = function(){
+        vm.search = function(download){
+            vm.tableParams.download = download;
             vm.tableParams.page(1);
             vm.tableParams.reload();
         }

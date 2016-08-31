@@ -55,6 +55,11 @@ class ComissoesController extends Controller
         }
         
         $dados = $qb->get();
+        
+        
+        if(isset($request["download"])){
+            return $this->pdf_pontos($dados);
+        }
         return response()->json([
             'data' => $dados
         ]);
@@ -109,7 +114,11 @@ class ComissoesController extends Controller
             $saldo_total+=$comissao["valor"];
         }
         $comissoes->saldo_total = $saldo_total;
-        //dd($comissoes);
+        
+        
+        if(isset($request["download"])){
+            return $this->pdf_comissoes($comissoes,$saldo_total);
+        }
         return response()->json([
             'data' => $comissoes,
             'saldo_total' => $saldo_total
@@ -239,5 +248,111 @@ class ComissoesController extends Controller
         }
 
         return redirect()->back()->with('message', 'Comissao deleted.');
+    }
+    
+    
+    
+    
+    
+    public function pdf_comissoes($dados, $saldo_total)
+    {
+        $pdf = \App::make('dompdf.wrapper');
+        $html = '
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            th, td {
+                text-align: left;
+                padding: 8px;
+            }
+            
+            tr:nth-child(even){background-color: #f2f2f2}
+        </style>
+        <center><h1>Relatório de Comissões</h1></center>
+        <table>
+            <tr>
+                <th> Distribuidor </th>
+                <th> Data </th>
+                <th> Estado </th>
+                <th> Comissão </th>
+                <th> Origem </th>
+                <th> Níveis </th>
+            </tr>
+            ';
+        foreach($dados as $dado){
+            $html.= '
+                <tr>
+                    <td> '.$dado->distribuidor->nome.' </td>
+                    <td> '.$dado->data.' </td>
+                    <td> '.$dado->distribuidor->uf.' </td>
+                    <td> '.number_format($dado->valor, 2, ',', '.').' </td>
+                    <td> '.$dado->origem->nome.' </td>
+                    <td> '.(($dado->nivel==1)?'Filho':(($dado->nivel==2)?'Neto':'Bisneto')).' </td>
+                </tr>
+            ';
+        }
+        $html.= '
+            <tr>
+                <td colspan="6">  </td>
+            </tr>
+            <tr>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td>  </td>
+                <td> Saldo Total: </td>
+                <td> '.number_format($saldo_total, 2, ',', '.').' </td>
+            </tr>
+        ';
+        $html.='</table>';
+        
+        $pdf->loadHTML($html);
+        
+        return $pdf->stream();
+    }
+    public function pdf_pontos($dados)
+    {
+        $pdf = \App::make('dompdf.wrapper');
+        $html = '
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            th, td {
+                text-align: left;
+                padding: 8px;
+            }
+            
+            tr:nth-child(even){background-color: #f2f2f2}
+        </style>
+        <center><h1>Relatório de Pontos</h1></center>
+        <table>
+            <tr>
+                <th> Distribuidor </th>
+                <th> Estado </th>
+                <th> Saldo </th>
+                <th> Pontuação </th>
+            </tr>
+            ';
+        foreach($dados as $dado){
+            $html.= '
+                <tr>
+                    <td> '.$dado->nome.' </td>
+                    <td> '.$dado->uf.' </td>
+                    <td> '.number_format($dado->valor, 2, ',', '.').' </td>
+                    <td> '.$dado->pontos.' </td>
+                </tr>
+            ';
+        }
+        $html.='</table>';
+        
+        $pdf->loadHTML($html);
+        
+        return $pdf->stream();
     }
 }
