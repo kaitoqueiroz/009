@@ -82,8 +82,13 @@
             }
         );
 
-        vm.search = function(download){
-            vm.tableParams.download = download;
+        vm.search = function(){
+            vm.tableParams.page(1);
+            vm.tableParams.reload();
+        }
+
+        vm.download = function(){
+            vm.tableParams.download = true;
             vm.tableParams.page(1);
             vm.tableParams.reload();
         }
