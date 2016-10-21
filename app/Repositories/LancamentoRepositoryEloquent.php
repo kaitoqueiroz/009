@@ -19,6 +19,7 @@ class LancamentoRepositoryEloquent extends BaseRepository implements LancamentoR
         "id",
         "tipo",
         "valor",
+        "frete",
         "observacao",
         "data",
         "pontos",

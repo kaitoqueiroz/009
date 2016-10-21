@@ -10,6 +10,6 @@ class Lancamento extends Model implements Transformable
 {
     use TransformableTrait;
 
-    protected $fillable = ['tipo','observacao','valor','pontos','data','distribuidor_id'];
+    protected $fillable = ['tipo','observacao','valor','frete','pontos','data','distribuidor_id'];
 
 }
