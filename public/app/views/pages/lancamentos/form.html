@@ -11,7 +11,7 @@
         <div class="panel-body">
             <form name="form1">
                 <div class="col-sm-12 no-padding">
-                    <div class="form-group col-sm-3">
+                    <div class="form-group col-sm-4 no-padding-right">
                         <label>Distribuidor</label>
                         <div angucomplete-alt id="ex1"
                           placeholder="Procurar"
@@ -26,7 +26,7 @@
                           input-class="form-control form-control-small"
                           match-class="highlight"></div>
                     </div>
-                    <div class="form-group col-sm-3">
+                    <div class="form-group col-sm-2 no-padding-right">
                         <label>Tipo de Lançamento</label>
                         <select class="form-control" ng-model="entity.tipo">
                             <option value=""></option>
@@ -36,18 +36,25 @@
                             <option value="pagamento">Pagamento</option>
                         </select>
                     </div>
-                    <div class="form-group col-sm-3">
+                    <div class="form-group col-sm-2 no-padding-right">
                         <label>Data</label>
                         <input type="date" class="form-control" ng-model="entity.data"/>
                     </div>
-                    <div class="form-group col-sm-3">
+                    <div class="form-group col-sm-2 no-padding-right">
                         <label>Valor</label>
                         <div class="input-group">
                             <span class="input-group-addon">R$</span>
                             <input type="number" class="form-control" ng-model="entity.valor" min="0" precision="2"/>
                         </div>
                     </div>
-                    <div class="form-group col-sm-12">
+                    <div class="form-group col-sm-2 no-padding-right">
+                        <label>Frete</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R$</span>
+                            <input type="number" class="form-control" ng-model="entity.frete" min="0" precision="2"/>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12 no-padding-right">
                         <label>Observação</label>
                         <textarea class="form-control" rows="5" ng-model="entity.observacao"></textarea>
                     </div>
