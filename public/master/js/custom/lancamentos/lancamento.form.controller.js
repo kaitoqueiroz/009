@@ -20,6 +20,7 @@
             lancamentoService.get($stateParams.id).then(function(result){
                 $scope.entity = result.data.data;
                 $scope.entity.data = new Date($scope.entity.data.replace("-","/"));
+                $scope.entity.valor = $scope.entity.valor.replace(".",",");
                 distribuidorService.get($scope.entity.distribuidor_id).then(function(res){
                     $scope.entity.distribuidor = res.data.data.data;
                 });

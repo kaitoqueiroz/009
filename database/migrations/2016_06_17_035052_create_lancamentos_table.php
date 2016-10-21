@@ -17,6 +17,7 @@ class CreateLancamentosTable extends Migration
             $table->increments('id');
             $table->string('tipo');
             $table->float('valor');
+            $table->float('frete');
             $table->text('observacao');
             $table->date('data');
             $table->double('pontos');

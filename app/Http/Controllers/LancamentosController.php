@@ -52,7 +52,7 @@ class LancamentosController extends Controller
                 $filtros[$arr[0]] = $arr[1];
             }
         }
-        $lancamentosAll = $this->repository->all();
+        $lancamentosAll = $this->repository->orderBy('data','desc')->all();
         $count = 30;
         if(isset($filtros["de"]) || isset($filtros["ate"])){
             $count = count($lancamentosAll);
@@ -93,10 +93,12 @@ class LancamentosController extends Controller
             $lancamentosAll = $lancamentos;
         }
         foreach($lancamentosAll as $i=>$lancamento){
-            if($lancamento["tipo"] == "credito" || $lancamento["tipo"] == "pagamento"){
-                $saldo_total+=$lancamento["valor"];
+            if($lancamento["tipo"] == "credito" || 
+                $lancamento["tipo"] == "pagamento" || 
+                $lancamento["tipo"] == "comissao"){
+                $saldo_total+=($lancamento["valor"] + $lancamento["frete"]);
             }else{
-                $saldo_total-=$lancamento["valor"];
+                $saldo_total-=($lancamento["valor"] + $lancamento["frete"]); 
             }
         }
         $lancamentos->saldo_total = $saldo_total;
@@ -171,10 +173,12 @@ class LancamentosController extends Controller
             $lancamentosAll = $lancamentos;
         }
         foreach($lancamentosAll as $i=>$lancamento){
-            if($lancamento["tipo"] == "credito" || $lancamento["tipo"] == "pagamento"){
-                $saldo_total+=$lancamento["valor"];
+            if($lancamento["tipo"] == "credito" || 
+                $lancamento["tipo"] == "pagamento" || 
+                $lancamento["tipo"] == "comissao"){
+                $saldo_total+=($lancamento["valor"] + $lancamento["frete"]);
             }else{
-                $saldo_total-=$lancamento["valor"];
+                $saldo_total-=($lancamento["valor"] + $lancamento["frete"]);
             }
         }
         $lancamentos->saldo_total = $saldo_total;
@@ -411,12 +415,12 @@ class LancamentosController extends Controller
         foreach($dados as $dado){
             $html.= '
                 <tr>
-                    <td> '.$dado->distribuidor->nome.' </td>
-                    <td> '.$dado->distribuidor->pai->nome.' </td>
+                    <td> '.$dado->distribuidor["nome"].' </td>
+                    <td> '.(($dado->distribuidor["pai"])?$dado->distribuidor["pai"]["nome"]:'').' </td>
                     <td> '.$dado->data.' </td>
-                    <td> '.$dado->distribuidor->uf.' </td>
+                    <td> '.$dado->distribuidor["uf"].' </td>
                     <td> '.$dado->tipo.' </td>
-                    <td> '.number_format($dado->valor, 2, ',', '.').' </td>
+                    <td> '.number_format($dado->valor + $dado->frete, 2, ',', '.').' </td>
                 </tr>
             ';
         }
